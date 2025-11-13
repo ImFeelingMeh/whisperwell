@@ -14,13 +14,170 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      answers: {
+        Row: {
+          created_at: string
+          id: string
+          question_id: string
+          responder_id: string
+          text: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question_id: string
+          responder_id: string
+          text: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question_id?: string
+          responder_id?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "answers_responder_id_fkey"
+            columns: ["responder_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          username: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          username?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      questions: {
+        Row: {
+          asker_id: string
+          claimed_at: string | null
+          claimed_by: string | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          status: string
+          text: string
+        }
+        Insert: {
+          asker_id: string
+          claimed_at?: string | null
+          claimed_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          text: string
+        }
+        Update: {
+          asker_id?: string
+          claimed_at?: string | null
+          claimed_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_asker_id_fkey"
+            columns: ["asker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_claimed_by_fkey"
+            columns: ["claimed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          reason: string | null
+          reporter_id: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          reporter_id: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          reporter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_reporter_id_fkey"
+            columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      ask_question: { Args: { p_text: string }; Returns: string }
+      get_and_claim_random: {
+        Args: never
+        Returns: {
+          question_id: string
+          question_text: string
+        }[]
+      }
+      get_final_chain: {
+        Args: { p_qid: string }
+        Returns: {
+          answer_order: number
+          answer_text: string
+        }[]
+      }
+      submit_answer: {
+        Args: { p_qid: string; p_text: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
