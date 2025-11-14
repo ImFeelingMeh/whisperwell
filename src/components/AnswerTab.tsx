@@ -38,17 +38,19 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
   // No question available
   if (!claimedQuestion) {
     return (
-      <Card className="border-2 shadow-lg">
+      <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50">
         <CardHeader>
           <CardTitle className="text-xl">All quiet</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-12">
-            <p className="text-muted-foreground mb-6">
+            <div className="well-visual mb-8">
+              <div className="well-opening opacity-50" />
+            </div>
+            <p className="text-muted-foreground leading-relaxed">
               All quiet — come back later, <br />
               your whisper will be needed.
             </p>
-            <div className="mx-auto w-16 h-16 rounded-full bg-muted animate-pulse" />
           </div>
         </CardContent>
       </Card>
@@ -57,10 +59,10 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
 
   // Question available to answer
   return (
-    <Card className="border-2 shadow-lg">
+    <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50">
       <CardHeader>
         <CardTitle className="text-xl">Someone asks</CardTitle>
-        <CardDescription className="text-lg italic pt-4">
+        <CardDescription className="text-lg italic pt-4 text-foreground/80">
           "{claimedQuestion.question_text}"
         </CardDescription>
       </CardHeader>

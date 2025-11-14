@@ -19,29 +19,37 @@ const AppPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-well/5">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] rounded-full bg-well/5 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-well-light/5 blur-3xl" />
+      </div>
+      
+      <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-10 shadow-sm">
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Droplets className="w-6 h-6 text-primary" />
-            <h1 className="text-xl font-bold text-foreground">WhisperWell</h1>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-well/20 to-well-light/20 flex items-center justify-center">
+              <Droplets className="w-5 h-5 text-well" />
+            </div>
+            <h1 className="text-xl font-bold bg-gradient-to-br from-well to-well-light bg-clip-text text-transparent">
+              WhisperWell
+            </h1>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
+          <Button 
+            variant="ghost" 
+            size="sm" 
             onClick={handleSignOut}
             className="text-muted-foreground hover:text-foreground"
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className="w-4 h-4 mr-2" />
+            Sign Out
           </Button>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container max-w-2xl mx-auto px-4 py-8">
+      <main className="max-w-2xl mx-auto p-4 py-8 relative z-10">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-card/80 backdrop-blur-sm border shadow-sm">
             <TabsTrigger value="ask" className="text-base">Ask</TabsTrigger>
             <TabsTrigger value="answer" className="text-base">Answer</TabsTrigger>
           </TabsList>
