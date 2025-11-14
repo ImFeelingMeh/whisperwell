@@ -35,10 +35,26 @@ export const useAuth = () => {
   }, [navigate]);
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    const redirectUrl = `${window.location.origin}/app`;
+    
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: redirectUrl
+      }
     });
+    
+    // Check if user already exists
+    if (data?.user && !data?.session && !error) {
+      return { 
+        error: { 
+          message: 'Please check your email to confirm your account before signing in.',
+          name: 'EmailConfirmationRequired',
+          status: 200
+        } as any 
+      };
+    }
     
     return { error };
   };
