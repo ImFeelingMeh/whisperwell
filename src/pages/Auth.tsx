@@ -23,39 +23,11 @@ const Auth = () => {
       : await signIn(email, password);
 
     if (error) {
-      // Handle email confirmation message differently
-      if (error.name === 'EmailConfirmationRequired') {
-        toast({
-          title: "Check your email",
-          description: error.message,
-        });
-        setEmail('');
-        setPassword('');
-        setIsSignUp(false);
-      } else {
-        // Provide more helpful error messages
-        let errorMessage = error.message;
-        if (error.message.includes('Invalid login credentials')) {
-          errorMessage = 'Invalid email or password. If you just signed up, please check your email to confirm your account first.';
-        } else if (error.message.includes('User already registered')) {
-          errorMessage = 'An account with this email already exists. Please sign in instead.';
-          setIsSignUp(false);
-        }
-        
-        toast({
-          title: "Error",
-          description: errorMessage,
-          variant: "destructive",
-        });
-      }
-    } else if (isSignUp) {
       toast({
-        title: "Check your email",
-        description: "We've sent you a confirmation link. Please check your email to complete sign up.",
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
       });
-      setEmail('');
-      setPassword('');
-      setIsSignUp(false);
     }
 
     setLoading(false);
