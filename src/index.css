@@ -8,68 +8,76 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 40 25% 96%;
-    --foreground: 270 15% 25%;
-    --card: 40 30% 98%;
-    --card-foreground: 270 15% 25%;
-    --popover: 40 30% 98%;
-    --popover-foreground: 270 15% 25%;
-    --primary: 270 40% 65%;
-    --primary-foreground: 40 25% 96%;
-    --secondary: 270 20% 90%;
-    --secondary-foreground: 270 15% 25%;
-    --muted: 270 15% 88%;
-    --muted-foreground: 270 10% 50%;
-    --accent: 280 45% 70%;
-    --accent-foreground: 270 15% 25%;
+    --background: 195 25% 96%;
+    --foreground: 200 20% 20%;
+    --card: 195 30% 98%;
+    --card-foreground: 200 20% 20%;
+    --popover: 195 30% 98%;
+    --popover-foreground: 200 20% 20%;
+    --primary: 195 65% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 195 30% 88%;
+    --secondary-foreground: 200 20% 20%;
+    --muted: 195 20% 90%;
+    --muted-foreground: 200 15% 45%;
+    --accent: 185 70% 55%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 70% 60%;
-    --destructive-foreground: 40 25% 96%;
-    --border: 270 15% 85%;
-    --input: 270 15% 85%;
-    --ring: 270 40% 65%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 195 25% 82%;
+    --input: 195 25% 82%;
+    --ring: 195 65% 48%;
     --radius: 1rem;
-    --well: 270 50% 60%;
-    --well-light: 280 45% 75%;
+    --well: 195 70% 45%;
+    --well-light: 185 75% 65%;
+    --well-deep: 200 85% 25%;
+    --water-surface: 190 80% 70%;
+    --stone: 30 15% 55%;
+    --stone-dark: 30 18% 35%;
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-foreground: 200 15% 26%;
+    --sidebar-primary: 195 65% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 195 20% 90%;
+    --sidebar-accent-foreground: 200 20% 20%;
+    --sidebar-border: 195 25% 82%;
+    --sidebar-ring: 195 65% 48%;
   }
 
   .dark {
-    --background: 270 20% 12%;
-    --foreground: 40 25% 92%;
-    --card: 270 20% 15%;
-    --card-foreground: 40 25% 92%;
-    --popover: 270 20% 15%;
-    --popover-foreground: 40 25% 92%;
-    --primary: 270 40% 70%;
-    --primary-foreground: 270 20% 12%;
-    --secondary: 270 15% 25%;
-    --secondary-foreground: 40 25% 92%;
-    --muted: 270 15% 22%;
-    --muted-foreground: 270 10% 60%;
-    --accent: 280 45% 65%;
-    --accent-foreground: 40 25% 92%;
+    --background: 200 25% 8%;
+    --foreground: 195 20% 92%;
+    --card: 200 20% 12%;
+    --card-foreground: 195 20% 92%;
+    --popover: 200 20% 12%;
+    --popover-foreground: 195 20% 92%;
+    --primary: 195 70% 55%;
+    --primary-foreground: 200 25% 8%;
+    --secondary: 200 20% 18%;
+    --secondary-foreground: 195 20% 92%;
+    --muted: 200 15% 20%;
+    --muted-foreground: 195 15% 65%;
+    --accent: 185 75% 60%;
+    --accent-foreground: 200 25% 8%;
     --destructive: 0 70% 55%;
-    --destructive-foreground: 40 25% 92%;
-    --border: 270 15% 25%;
-    --input: 270 15% 25%;
-    --ring: 270 40% 70%;
-    --well: 270 50% 55%;
-    --well-light: 280 45% 65%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --destructive-foreground: 195 20% 92%;
+    --border: 200 20% 22%;
+    --input: 200 20% 22%;
+    --ring: 195 70% 55%;
+    --well: 195 75% 50%;
+    --well-light: 185 80% 70%;
+    --well-deep: 200 90% 20%;
+    --water-surface: 190 85% 65%;
+    --stone: 30 12% 45%;
+    --stone-dark: 30 15% 25%;
+    --sidebar-background: 200 20% 10%;
+    --sidebar-foreground: 195 20% 92%;
+    --sidebar-primary: 195 70% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 200 20% 18%;
+    --sidebar-accent-foreground: 195 20% 92%;
+    --sidebar-border: 200 20% 22%;
+    --sidebar-ring: 195 70% 55%;
   }
 }
 
@@ -92,7 +100,7 @@ All colors MUST be HSL.
   .ripple {
     position: absolute;
     border-radius: 50%;
-    background: hsl(var(--well-light) / 0.3);
+    background: radial-gradient(circle, hsl(var(--water-surface) / 0.5) 0%, hsl(var(--well-light) / 0.3) 50%, transparent 100%);
     animation: ripple-animation 1.2s ease-out;
     pointer-events: none;
   }
@@ -138,8 +146,8 @@ All colors MUST be HSL.
 
   .well-visual {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 240px;
     margin: 0 auto;
   }
 
@@ -147,40 +155,123 @@ All colors MUST be HSL.
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: radial-gradient(circle at center, hsl(var(--well) / 0.2) 0%, hsl(var(--background)) 70%);
-    border: 3px solid hsl(var(--well) / 0.4);
+    background: 
+      radial-gradient(circle at 35% 30%, hsl(var(--water-surface) / 0.6) 0%, transparent 50%),
+      radial-gradient(circle at center, hsl(var(--well) / 0.8) 0%, hsl(var(--well-deep) / 0.95) 60%, hsl(var(--stone-dark)) 100%);
+    border: 8px solid hsl(var(--stone));
+    box-shadow: 
+      inset 0 8px 16px hsl(var(--well-deep) / 0.6),
+      inset 0 -4px 12px hsl(var(--water-surface) / 0.3),
+      0 4px 20px hsl(var(--well) / 0.4);
   }
 
   .well-opening::before {
     content: '';
     position: absolute;
-    inset: 10px;
+    inset: 16px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, hsl(var(--well) / 0.3), transparent 60%);
-    animation: shimmer 3s ease-in-out infinite;
+    background: radial-gradient(
+      circle at 35% 25%, 
+      hsl(var(--water-surface) / 0.7) 0%, 
+      hsl(var(--well-light) / 0.4) 30%,
+      transparent 60%
+    );
+    animation: water-shimmer 4s ease-in-out infinite;
   }
 
-  @keyframes shimmer {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+  .well-opening::after {
+    content: '';
+    position: absolute;
+    inset: 16px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 65% 70%, 
+      hsl(var(--water-surface) / 0.4) 0%, 
+      transparent 40%
+    );
+    animation: water-shimmer 4s ease-in-out infinite reverse;
+  }
+
+  @keyframes water-shimmer {
+    0%, 100% { 
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 1;
+      transform: scale(1.05);
+    }
   }
 
   .question-drop {
-    animation: drop-into-well 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: drop-into-well 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
 
   @keyframes drop-into-well {
     0% {
       opacity: 1;
-      transform: translateY(-20px) scale(1);
+      transform: translateY(-30px) scale(1) rotateZ(0deg);
     }
-    70% {
-      opacity: 0.6;
-      transform: translateY(100px) scale(0.6);
+    50% {
+      opacity: 0.8;
+      transform: translateY(80px) scale(0.7) rotateZ(5deg);
+    }
+    75% {
+      opacity: 0.4;
+      transform: translateY(140px) scale(0.4) rotateZ(-3deg);
     }
     100% {
       opacity: 0;
-      transform: translateY(150px) scale(0.2);
+      transform: translateY(180px) scale(0.1) rotateZ(0deg);
+    }
+  }
+
+  .water-splash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: splash-rings 1.2s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes splash-rings {
+    0% {
+      width: 40px;
+      height: 40px;
+      opacity: 1;
+      border: 3px solid hsl(var(--water-surface));
+    }
+    100% {
+      width: 200px;
+      height: 200px;
+      opacity: 0;
+      border: 1px solid hsl(var(--water-surface) / 0.2);
+    }
+  }
+
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, hsl(var(--water-surface) / 0.8), hsl(var(--well-light) / 0.3));
+    box-shadow: inset 0 -2px 4px hsl(var(--well) / 0.3);
+    animation: float-bubble 3s ease-in-out infinite;
+  }
+
+  @keyframes float-bubble {
+    0% {
+      transform: translateY(0) translateX(0) scale(1);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.7;
+    }
+    90% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(-300px) translateX(20px) scale(0.6);
+      opacity: 0;
     }
   }
 
@@ -188,29 +279,37 @@ All colors MUST be HSL.
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 2px solid hsl(var(--well) / 0.4);
-    animation: ripple-expand 2s ease-out infinite;
+    border: 3px solid hsl(var(--water-surface) / 0.5);
+    box-shadow: 0 0 10px hsl(var(--well-light) / 0.3);
+    animation: ripple-expand 2.5s ease-out infinite;
   }
 
   .waiting-ripple:nth-child(2) {
-    animation-delay: 0.7s;
+    animation-delay: 0.8s;
   }
 
   .waiting-ripple:nth-child(3) {
-    animation-delay: 1.4s;
+    animation-delay: 1.6s;
   }
 
   @keyframes ripple-expand {
     0% {
-      transform: scale(0.8);
+      transform: scale(0.7);
       opacity: 0;
+      border-color: hsl(var(--water-surface) / 0.6);
     }
-    50% {
-      opacity: 0.6;
+    30% {
+      opacity: 0.8;
+      border-color: hsl(var(--well-light) / 0.7);
+    }
+    70% {
+      opacity: 0.4;
+      border-color: hsl(var(--well) / 0.3);
     }
     100% {
-      transform: scale(1.5);
+      transform: scale(1.6);
       opacity: 0;
+      border-color: hsl(var(--well) / 0);
     }
   }
 }

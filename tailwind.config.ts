@@ -50,6 +50,14 @@ export default {
         well: {
           DEFAULT: "hsl(var(--well))",
           light: "hsl(var(--well-light))",
+          deep: "hsl(var(--well-deep))",
+        },
+        water: {
+          surface: "hsl(var(--water-surface))",
+        },
+        stone: {
+          DEFAULT: "hsl(var(--stone))",
+          dark: "hsl(var(--stone-dark))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

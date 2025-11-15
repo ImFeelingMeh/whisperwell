@@ -38,11 +38,19 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
   // No question available
   if (!claimedQuestion) {
     return (
-      <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50">
-        <CardHeader>
-          <CardTitle className="text-xl">All quiet</CardTitle>
+      <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50 backdrop-blur-sm overflow-hidden relative">
+        {/* Gentle bubbles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
+          <div className="bubble" style={{ left: '25%', width: '8px', height: '8px', animationDelay: '1s', animationDuration: '6s' }} />
+          <div className="bubble" style={{ left: '70%', width: '10px', height: '10px', animationDelay: '3s', animationDuration: '5s' }} />
+        </div>
+
+        <CardHeader className="relative z-10">
+          <CardTitle className="text-xl bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
+            All quiet
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative z-10">
           <div className="text-center py-12">
             <div className="well-visual mb-8">
               <div className="well-opening opacity-50" />
@@ -59,21 +67,30 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
 
   // Question available to answer
   return (
-    <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50">
-      <CardHeader>
-        <CardTitle className="text-xl">Someone asks</CardTitle>
-        <CardDescription className="text-lg italic pt-4 text-foreground/80">
+    <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50 backdrop-blur-sm overflow-hidden relative">
+      {/* Floating bubbles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25">
+        <div className="bubble" style={{ left: '10%', width: '10px', height: '10px', animationDelay: '0s', animationDuration: '4.5s' }} />
+        <div className="bubble" style={{ left: '50%', width: '12px', height: '12px', animationDelay: '2s', animationDuration: '5s' }} />
+        <div className="bubble" style={{ left: '85%', width: '8px', height: '8px', animationDelay: '1s', animationDuration: '4s' }} />
+      </div>
+
+      <CardHeader className="relative z-10">
+        <CardTitle className="text-xl bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
+          Someone asks
+        </CardTitle>
+        <CardDescription className="text-lg italic pt-4 text-foreground/80 border-l-4 border-well/30 pl-4 my-4">
           "{claimedQuestion.question_text}"
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 relative z-10">
         <Textarea
           placeholder="Your whisper..."
           value={answerText}
           onChange={(e) => setAnswerText(e.target.value)}
           maxLength={150}
           rows={3}
-          className="resize-none text-base"
+          className="resize-none text-base border-well/20 focus:border-well/40 transition-colors"
         />
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
@@ -82,7 +99,7 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
           <Button
             onClick={handleSubmit}
             disabled={!answerText.trim() || submitting}
-            className="min-w-[120px]"
+            className="min-w-[120px] bg-gradient-to-r from-well to-well-light hover:from-well/90 hover:to-well-light/90 shadow-lg shadow-well/20"
           >
             {submitting ? (
               <>
