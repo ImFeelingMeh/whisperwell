@@ -44,7 +44,7 @@ const AskTab = ({ userId }: AskTabProps) => {
   }
 
   // User has an active or completed question
-  if (myQuestion) {
+  if (myQuestion && (myQuestion.status !== 'complete' || showCompleted)) {
     if (myQuestion.status === 'complete' && answers.length === 3 && showCompleted) {
       return (
         <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50 backdrop-blur-sm">
