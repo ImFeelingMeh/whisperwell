@@ -14,6 +14,7 @@ const AskTab = ({ userId }: AskTabProps) => {
   const [questionText, setQuestionText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [dropping, setDropping] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(true);
 
   const handleAsk = async () => {
     if (!questionText.trim()) return;
@@ -44,7 +45,7 @@ const AskTab = ({ userId }: AskTabProps) => {
 
   // User has an active or completed question
   if (myQuestion) {
-    if (myQuestion.status === 'complete' && answers.length === 3) {
+    if (myQuestion.status === 'complete' && answers.length === 3 && showCompleted) {
       return (
         <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50 backdrop-blur-sm">
           <CardHeader>
@@ -68,7 +69,7 @@ const AskTab = ({ userId }: AskTabProps) => {
               Three voices answered. You may ask again.
             </p>
             <Button
-              onClick={() => window.location.reload()}
+              onClick={() => setShowCompleted(false)}
               className="w-full bg-gradient-to-r from-well to-well-light hover:from-well/90 hover:to-well-light/90 shadow-lg shadow-well/20"
             >
               Ask Another Question
