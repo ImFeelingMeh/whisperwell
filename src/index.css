@@ -8,76 +8,76 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 195 25% 96%;
-    --foreground: 200 20% 20%;
-    --card: 195 30% 98%;
-    --card-foreground: 200 20% 20%;
-    --popover: 195 30% 98%;
-    --popover-foreground: 200 20% 20%;
-    --primary: 195 65% 48%;
+    --background: 220 15% 96%;
+    --foreground: 220 10% 25%;
+    --card: 220 20% 98%;
+    --card-foreground: 220 10% 25%;
+    --popover: 220 20% 98%;
+    --popover-foreground: 220 10% 25%;
+    --primary: 250 50% 65%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 195 30% 88%;
-    --secondary-foreground: 200 20% 20%;
-    --muted: 195 20% 90%;
-    --muted-foreground: 200 15% 45%;
-    --accent: 185 70% 55%;
+    --secondary: 220 15% 90%;
+    --secondary-foreground: 220 10% 25%;
+    --muted: 220 15% 92%;
+    --muted-foreground: 220 10% 50%;
+    --accent: 270 45% 70%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 70% 60%;
+    --destructive: 0 60% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 195 25% 82%;
-    --input: 195 25% 82%;
-    --ring: 195 65% 48%;
-    --radius: 1rem;
-    --well: 195 70% 45%;
-    --well-light: 185 75% 65%;
-    --well-deep: 200 85% 25%;
-    --water-surface: 190 80% 70%;
-    --stone: 30 15% 55%;
-    --stone-dark: 30 18% 35%;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 200 15% 26%;
-    --sidebar-primary: 195 65% 48%;
+    --border: 220 15% 86%;
+    --input: 220 15% 86%;
+    --ring: 250 50% 65%;
+    --radius: 0.75rem;
+    --well: 240 45% 60%;
+    --well-light: 250 50% 75%;
+    --well-deep: 240 60% 20%;
+    --water-surface: 230 50% 70%;
+    --stone: 30 12% 55%;
+    --stone-dark: 30 15% 35%;
+    --sidebar-background: 220 20% 97%;
+    --sidebar-foreground: 220 10% 30%;
+    --sidebar-primary: 250 50% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 195 20% 90%;
-    --sidebar-accent-foreground: 200 20% 20%;
-    --sidebar-border: 195 25% 82%;
-    --sidebar-ring: 195 65% 48%;
+    --sidebar-accent: 220 15% 90%;
+    --sidebar-accent-foreground: 220 10% 25%;
+    --sidebar-border: 220 15% 86%;
+    --sidebar-ring: 250 50% 65%;
   }
 
   .dark {
-    --background: 200 25% 8%;
-    --foreground: 195 20% 92%;
-    --card: 200 20% 12%;
-    --card-foreground: 195 20% 92%;
-    --popover: 200 20% 12%;
-    --popover-foreground: 195 20% 92%;
-    --primary: 195 70% 55%;
-    --primary-foreground: 200 25% 8%;
-    --secondary: 200 20% 18%;
-    --secondary-foreground: 195 20% 92%;
-    --muted: 200 15% 20%;
-    --muted-foreground: 195 15% 65%;
-    --accent: 185 75% 60%;
-    --accent-foreground: 200 25% 8%;
-    --destructive: 0 70% 55%;
-    --destructive-foreground: 195 20% 92%;
-    --border: 200 20% 22%;
-    --input: 200 20% 22%;
-    --ring: 195 70% 55%;
-    --well: 195 75% 50%;
-    --well-light: 185 80% 70%;
-    --well-deep: 200 90% 20%;
-    --water-surface: 190 85% 65%;
-    --stone: 30 12% 45%;
-    --stone-dark: 30 15% 25%;
-    --sidebar-background: 200 20% 10%;
-    --sidebar-foreground: 195 20% 92%;
-    --sidebar-primary: 195 70% 55%;
+    --background: 240 20% 8%;
+    --foreground: 240 10% 88%;
+    --card: 240 18% 12%;
+    --card-foreground: 240 10% 88%;
+    --popover: 240 18% 12%;
+    --popover-foreground: 240 10% 88%;
+    --primary: 250 60% 70%;
+    --primary-foreground: 240 20% 8%;
+    --secondary: 240 15% 18%;
+    --secondary-foreground: 240 10% 88%;
+    --muted: 240 12% 22%;
+    --muted-foreground: 240 8% 62%;
+    --accent: 270 50% 65%;
+    --accent-foreground: 240 20% 8%;
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 240 10% 88%;
+    --border: 240 15% 20%;
+    --input: 240 15% 20%;
+    --ring: 250 60% 70%;
+    --well: 240 50% 55%;
+    --well-light: 250 55% 70%;
+    --well-deep: 240 65% 15%;
+    --water-surface: 230 45% 60%;
+    --stone: 30 10% 45%;
+    --stone-dark: 30 12% 25%;
+    --sidebar-background: 240 18% 10%;
+    --sidebar-foreground: 240 10% 88%;
+    --sidebar-primary: 250 60% 70%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 200 20% 18%;
-    --sidebar-accent-foreground: 195 20% 92%;
-    --sidebar-border: 200 20% 22%;
-    --sidebar-ring: 195 70% 55%;
+    --sidebar-accent: 240 15% 18%;
+    --sidebar-accent-foreground: 240 10% 88%;
+    --sidebar-border: 240 15% 20%;
+    --sidebar-ring: 250 60% 70%;
   }
 }
 
@@ -87,7 +87,12 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans transition-colors duration-300;
+  }
+  
+  /* Smooth transitions for all interactive elements */
+  button, a, input, textarea {
+    @apply transition-all duration-200 ease-in-out;
   }
 }
 
