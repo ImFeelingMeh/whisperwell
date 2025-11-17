@@ -65,6 +65,30 @@ export const useAnswer = (userId: string | undefined) => {
   useEffect(() => {
     if (userId) {
       getRandomQuestion();
+
+      // Subscribe to realtime updates for new questions
+      const channel = supabase
+        .channel('answer-updates')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'questions'
+          },
+          (payload) => {
+            // When questions change, try to get a new one if we don't have one
+            if (!claimedQuestion || payload.eventType === 'INSERT' || 
+                (payload.eventType === 'UPDATE' && payload.new.status === 'open')) {
+              getRandomQuestion();
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [userId]);
 
