@@ -29,7 +29,7 @@ export const useAnswer = (userId: string | undefined) => {
       return;
     }
 
-    if (data && data.length > 0) {
+    if (data && data.length > 0 && data[0].question_text?.trim()) {
       setClaimedQuestion(data[0]);
     } else {
       setClaimedQuestion(null);
