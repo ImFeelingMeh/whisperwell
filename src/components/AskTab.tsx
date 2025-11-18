@@ -47,30 +47,31 @@ const AskTab = ({ userId }: AskTabProps) => {
   if (myQuestion && (myQuestion.status !== 'complete' || showCompleted)) {
     if (myQuestion.status === 'complete' && answers.length === 3 && showCompleted) {
       return (
-        <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50 backdrop-blur-sm">
+        <Card className="border-2 shadow-2xl bg-gradient-to-br from-card via-card to-card/80 backdrop-blur-sm animate-fade-in-up">
           <CardHeader>
-            <CardTitle className="text-xl bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-display bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
               Your question returned
             </CardTitle>
             <CardDescription className="text-base italic text-muted-foreground">"{myQuestion.text}"</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              {answers.map((answer) => (
+              {answers.map((answer, index) => (
                 <div
                   key={answer.answer_order}
-                  className="answer-line p-5 bg-gradient-to-br from-well/10 to-water-surface/10 rounded-xl border-2 border-well/30 shadow-md hover:shadow-lg hover:border-well/50 transition-all duration-300"
+                  className="answer-line p-5 bg-gradient-to-br from-well/10 to-water-surface/10 rounded-xl border-2 border-well/30 shadow-md hover:shadow-xl hover:border-well/50 hover:scale-[1.02] transition-all duration-300"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <p className="text-foreground leading-relaxed">{answer.answer_text}</p>
                 </div>
               ))}
             </div>
-            <p className="text-sm text-muted-foreground text-center pt-4">
+            <p className="text-sm text-muted-foreground text-center pt-4 font-medium">
               Three voices answered. You may ask again.
             </p>
             <Button
               onClick={() => setShowCompleted(false)}
-              className="w-full bg-gradient-to-r from-well to-well-light hover:from-well/90 hover:to-well-light/90 shadow-lg shadow-well/20"
+              className="w-full bg-gradient-to-r from-well to-well-light hover:from-well/90 hover:to-well-light/90 shadow-lg shadow-well/30 hover:shadow-well/40 transition-all duration-300 hover:scale-105 font-display"
             >
               Ask Another Question
             </Button>
@@ -81,7 +82,7 @@ const AskTab = ({ userId }: AskTabProps) => {
 
     // Question is still waiting for answers
     return (
-      <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50 backdrop-blur-sm overflow-hidden relative">
+      <Card className="border-2 shadow-2xl bg-gradient-to-br from-card via-card to-card/80 backdrop-blur-sm overflow-hidden relative animate-fade-in-up">
         {/* Floating bubbles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
           <div className="bubble" style={{ left: '20%', width: '10px', height: '10px', animationDelay: '0.5s', animationDuration: '5s' }} />
@@ -90,21 +91,21 @@ const AskTab = ({ userId }: AskTabProps) => {
         </div>
 
         <CardHeader className="relative z-10">
-          <CardTitle className="text-xl bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
+          <CardTitle className="text-2xl font-display bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
             In the Well
           </CardTitle>
           <CardDescription className="text-base italic text-muted-foreground">"{myQuestion.text}"</CardDescription>
         </CardHeader>
         <CardContent className="relative z-10">
           <div className="text-center py-8">
-            <div className="well-visual mb-8">
+            <div className="well-visual mb-8 animate-float">
               <div className="well-opening">
                 <div className="waiting-ripple" />
                 <div className="waiting-ripple" />
                 <div className="waiting-ripple" />
               </div>
             </div>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed text-lg">
               Your question's in the Well. <br />
               When three voices answer, we'll bring it back.
             </p>
@@ -126,7 +127,7 @@ const AskTab = ({ userId }: AskTabProps) => {
       </div>
 
       <CardHeader className="relative z-10">
-        <CardTitle className="text-xl bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
+        <CardTitle className="text-2xl font-display bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
           Drop a question in the Well
         </CardTitle>
         <CardDescription className="text-base text-muted-foreground">
@@ -136,7 +137,7 @@ const AskTab = ({ userId }: AskTabProps) => {
       </CardHeader>
       <CardContent className="space-y-6 relative z-10">
         <div className="relative">
-          <div className="well-visual mb-8">
+          <div className="well-visual mb-8 animate-float">
             <div className="well-opening" />
             {dropping && (
               <>
@@ -166,17 +167,17 @@ const AskTab = ({ userId }: AskTabProps) => {
             disabled={submitting || dropping}
             rows={4}
             maxLength={500}
-            className="resize-none text-base border-well/20 focus:border-well/40 transition-colors"
+            className="resize-none text-base border-well/20 focus:border-well/50 focus:ring-2 focus:ring-well/20 transition-all duration-300"
           />
           
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-muted-foreground font-medium">
               {questionText.length}/500
             </span>
             <Button
               onClick={handleAsk}
               disabled={!questionText.trim() || submitting || dropping}
-              className="min-w-[160px] ripple-container bg-gradient-to-r from-well to-well-light hover:from-well/90 hover:to-well-light/90 shadow-lg shadow-well/20 transition-all duration-300"
+              className="min-w-[160px] ripple-container bg-gradient-to-r from-well to-well-light hover:from-well/90 hover:to-well-light/90 shadow-lg shadow-well/30 hover:shadow-well/40 transition-all duration-300 hover:scale-105 font-display disabled:hover:scale-100"
             >
               {submitting ? (
                 <>
