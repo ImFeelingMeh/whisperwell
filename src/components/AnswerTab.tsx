@@ -38,7 +38,7 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
   // No question available
   if (!claimedQuestion) {
     return (
-      <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50 backdrop-blur-sm overflow-hidden relative">
+      <Card className="border-2 shadow-2xl bg-gradient-to-br from-card via-card to-card/80 backdrop-blur-sm overflow-hidden relative animate-fade-in-up">
         {/* Gentle bubbles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
           <div className="bubble" style={{ left: '25%', width: '8px', height: '8px', animationDelay: '1s', animationDuration: '6s' }} />
@@ -46,16 +46,16 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
         </div>
 
         <CardHeader className="relative z-10">
-          <CardTitle className="text-xl bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
+          <CardTitle className="text-2xl font-display bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
             All quiet
           </CardTitle>
         </CardHeader>
         <CardContent className="relative z-10">
           <div className="text-center py-12">
-            <div className="well-visual mb-8">
+            <div className="well-visual mb-8 animate-float">
               <div className="well-opening opacity-50" />
             </div>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed text-lg">
               All quiet — come back later, <br />
               your whisper will be needed.
             </p>
@@ -67,7 +67,7 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
 
   // Question available to answer
   return (
-    <Card className="border-2 shadow-lg bg-gradient-to-b from-card to-card/50 backdrop-blur-sm overflow-hidden relative">
+    <Card className="border-2 shadow-2xl bg-gradient-to-br from-card via-card to-card/80 backdrop-blur-sm overflow-hidden relative animate-fade-in-up hover:shadow-well/10 transition-shadow duration-500">
       {/* Floating bubbles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25">
         <div className="bubble" style={{ left: '10%', width: '10px', height: '10px', animationDelay: '0s', animationDuration: '4.5s' }} />
@@ -76,30 +76,30 @@ const AnswerTab = ({ userId }: AnswerTabProps) => {
       </div>
 
       <CardHeader className="relative z-10">
-        <CardTitle className="text-xl bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
+        <CardTitle className="text-2xl font-display bg-gradient-to-r from-well to-well-light bg-clip-text text-transparent">
           Someone asks
         </CardTitle>
-        <CardDescription className="text-lg italic pt-4 text-foreground/80 border-l-4 border-well/30 pl-4 my-4">
+        <CardDescription className="text-lg italic pt-4 text-foreground/90 border-l-4 border-well/40 pl-4 my-4 hover:border-well/60 transition-colors duration-300">
           "{claimedQuestion.question_text}"
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 relative z-10">
+      <CardContent className="space-y-5 relative z-10">
         <Textarea
           placeholder="Your whisper..."
           value={answerText}
           onChange={(e) => setAnswerText(e.target.value)}
           maxLength={150}
           rows={3}
-          className="resize-none text-base border-well/20 focus:border-well/40 transition-colors"
+          className="resize-none text-base border-well/20 focus:border-well/50 focus:ring-2 focus:ring-well/20 transition-all duration-300"
         />
         <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-muted-foreground font-medium">
             {answerText.length}/150
           </span>
           <Button
             onClick={handleSubmit}
             disabled={!answerText.trim() || submitting}
-            className="min-w-[120px] bg-gradient-to-r from-well to-well-light hover:from-well/90 hover:to-well-light/90 shadow-lg shadow-well/20"
+            className="min-w-[140px] bg-gradient-to-r from-well to-well-light hover:from-well/90 hover:to-well-light/90 shadow-lg shadow-well/30 hover:shadow-well/40 transition-all duration-300 hover:scale-105 font-display"
           >
             {submitting ? (
               <>
