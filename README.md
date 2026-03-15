@@ -1,15 +1,17 @@
 # WhisperWell
 
-A cozy, two-tab mobile-first web app where users drop one anonymous question into a well and receive a stitched 3-line reply from three strangers. The experience feels calm, intimate, and surprisingly human.
+A calm, anonymous peer-support app where users drop a whisper into the well and receive three thoughtful responses from the community.
 
 ## Features
 
-- **Two Tabs**: Ask and Answer
-- **Magic Link Authentication**: Email-based authentication via Supabase
-- **One Active Question**: Users can only have one question in the well at a time
-- **Anonymous Answers**: Three strangers answer each question anonymously
-- **Real-time Updates**: Get notified when your question receives all three answers
-- **Calm Design**: Warm colors, rounded UI, and smooth animations
+- **Anonymous Access**: Continue anonymously with no username or profile
+- **Reciprocity Gate**: Respond to 3 whispers before posting your own
+- **Whisper Metadata**: Optional category, emotion, and vent-mode tags
+- **Voices from the Well**: Scrollable whisper feed with quick respond/report actions
+- **Daily Mood Check-in**: Gentle `good`, `okay`, `struggling` check-in
+- **Safety Layer**: Harmful content blocking, crisis guidance prompt, and reporting
+- **Moderation Queue**: Auto-flag + user-report queue for review
+- **Response Reactions**: `helpful`, `relatable`, `encouraging` reactions with no like counts
 
 ## Architecture
 

@@ -24,14 +24,13 @@ const MoodCheckin = ({ userId }: MoodCheckinProps) => {
               onClick={() => submitMood(mood.value)}
               className={`mood-btn ${todayMood === mood.value ? 'selected' : 'border-border bg-card hover:border-muted-foreground/30'}`}
             >
-              <span className="text-2xl">{mood.emoji}</span>
-              <span className="text-xs font-medium text-muted-foreground">{mood.label}</span>
+              <span className="text-sm font-medium text-muted-foreground">{mood.label}</span>
             </button>
           ))}
         </div>
         {todayMood && (
           <p className="text-xs text-muted-foreground text-center mt-3 animate-fade-in-up">
-            Thanks for checking in 💛
+            Thanks for checking in.
           </p>
         )}
       </CardContent>

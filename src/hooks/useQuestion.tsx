@@ -14,8 +14,10 @@ interface Question {
 }
 
 interface Answer {
+  answer_id: string;
   answer_text: string;
   answer_order: number;
+  my_reaction: string | null;
 }
 
 export const useQuestion = (userId: string | undefined) => {
@@ -73,7 +75,7 @@ export const useQuestion = (userId: string | undefined) => {
       return;
     }
 
-    setAnswers(data || []);
+    setAnswers((data || []) as Answer[]);
   };
 
   const askQuestion = async (text: string, category?: string, emotion?: string, ventMode?: string) => {
