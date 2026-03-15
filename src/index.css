@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 30% 96%;
+    --foreground: 200 15% 25%;
+    --card: 40 25% 98%;
+    --card-foreground: 200 15% 25%;
+    --popover: 40 25% 98%;
+    --popover-foreground: 200 15% 25%;
+    --primary: 174 42% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 20% 92%;
+    --secondary-foreground: 200 15% 25%;
+    --muted: 40 15% 92%;
+    --muted-foreground: 200 10% 50%;
+    --accent: 264 35% 75%;
+    --accent-foreground: 264 60% 30%;
+    --destructive: 0 55% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 174 42% 51%;
+    --radius: 0.75rem;
+
+    --teal: 174 42% 51%;
+    --teal-light: 174 45% 70%;
+    --teal-dark: 174 50% 35%;
+    --lavender: 264 35% 75%;
+    --lavender-light: 264 30% 88%;
+    --lavender-dark: 264 40% 55%;
+    --warm: 30 40% 90%;
+    --warm-dark: 30 30% 70%;
+    --sage: 150 20% 65%;
+    --sage-light: 150 25% 85%;
+    --rose: 350 40% 75%;
+    --amber: 35 70% 65%;
+
+    --sidebar-background: 40 25% 97%;
+    --sidebar-foreground: 200 15% 30%;
+    --sidebar-primary: 174 42% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 20% 92%;
+    --sidebar-accent-foreground: 200 15% 25%;
+    --sidebar-border: 40 15% 88%;
+    --sidebar-ring: 174 42% 51%;
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 40 15% 90%;
+    --card: 220 18% 14%;
+    --card-foreground: 40 15% 90%;
+    --popover: 220 18% 14%;
+    --popover-foreground: 40 15% 90%;
+    --primary: 174 42% 55%;
+    --primary-foreground: 220 20% 8%;
+    --secondary: 220 15% 20%;
+    --secondary-foreground: 40 15% 90%;
+    --muted: 220 12% 22%;
+    --muted-foreground: 220 8% 60%;
+    --accent: 264 35% 65%;
+    --accent-foreground: 264 20% 90%;
+    --destructive: 0 55% 50%;
+    --destructive-foreground: 40 15% 90%;
+    --border: 220 15% 22%;
+    --input: 220 15% 22%;
+    --ring: 174 42% 55%;
+
+    --teal: 174 42% 55%;
+    --teal-light: 174 40% 65%;
+    --teal-dark: 174 50% 30%;
+    --lavender: 264 35% 65%;
+    --lavender-light: 264 30% 40%;
+    --lavender-dark: 264 40% 50%;
+    --warm: 30 25% 25%;
+    --warm-dark: 30 20% 40%;
+    --sage: 150 20% 50%;
+    --sage-light: 150 15% 30%;
+    --rose: 350 35% 60%;
+    --amber: 35 60% 55%;
+
+    --sidebar-background: 220 18% 12%;
+    --sidebar-foreground: 40 15% 90%;
+    --sidebar-primary: 174 42% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 20%;
+    --sidebar-accent-foreground: 40 15% 90%;
+    --sidebar-border: 220 15% 22%;
+    --sidebar-ring: 174 42% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-500;
+    font-family: 'Nunito', system-ui, sans-serif;
+  }
+  button, a, input, textarea {
+    @apply transition-all duration-300;
+  }
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes soft-glow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.08); }
+  50% { box-shadow: 0 8px 24px -16px hsl(var(--primary) / 0.35); }
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.02); }
+}
+
+@keyframes ripple-out {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes drop-in {
+  0% { opacity: 1; transform: translateY(-20px) scale(1); }
+  60% { opacity: 0.7; transform: translateY(60px) scale(0.6); }
+  100% { opacity: 0; transform: translateY(100px) scale(0.2); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, hsl(var(--teal) / 0.08), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+.animate-fade-in-up { animation: fade-in-up 0.5s ease-out; }
+.animate-gentle-pulse { animation: gentle-pulse 3s ease-in-out infinite; }
+.animate-soft-glow { animation: soft-glow 3.2s ease-in-out infinite; }
+
+@layer components {
+  /* Well visual */
+  .well-visual {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+  }
+
+  .well-opening {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: 
+      radial-gradient(circle at 35% 30%, hsl(var(--teal-light) / 0.5) 0%, transparent 50%),
+      radial-gradient(circle at center, hsl(var(--teal) / 0.6) 0%, hsl(var(--teal-dark) / 0.8) 60%, hsl(var(--warm-dark)) 100%);
+    border: 6px solid hsl(var(--warm-dark));
+    box-shadow: 
+      inset 0 6px 12px hsl(var(--teal-dark) / 0.4),
+      inset 0 -3px 8px hsl(var(--teal-light) / 0.2),
+      0 4px 16px hsl(var(--teal) / 0.2);
+  }
+
+  .well-opening::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 25%, hsl(var(--teal-light) / 0.5) 0%, transparent 60%);
+    animation: gentle-pulse 4s ease-in-out infinite;
+  }
+
+  /* Question drop animation */
+  .question-drop {
+    animation: drop-in 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  /* Water splash */
+  .water-splash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid hsl(var(--teal-light));
+    animation: ripple-out 1s ease-out forwards;
+    pointer-events: none;
+  }
+
+  /* Waiting ripples */
+  .waiting-ripple {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid hsl(var(--teal-light) / 0.4);
+    animation: ripple-out 2.5s ease-out infinite;
+  }
+  .waiting-ripple:nth-child(2) { animation-delay: 0.8s; }
+  .waiting-ripple:nth-child(3) { animation-delay: 1.6s; }
+
+  /* Answer reveal */
+  .answer-line {
+    opacity: 0;
+    animation: slide-up 0.6s ease-out forwards;
+  }
+  .answer-line:nth-child(1) { animation-delay: 0.2s; }
+  .answer-line:nth-child(2) { animation-delay: 0.6s; }
+  .answer-line:nth-child(3) { animation-delay: 1.0s; }
+
+  /* Emotion tag styles */
+  .emotion-tag {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium;
+  }
+
+  /* Category chip */
+  .category-chip {
+    @apply inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border cursor-pointer transition-all duration-200;
+  }
+  .category-chip:hover { @apply scale-105; }
+  .category-chip.selected {
+    @apply bg-primary text-primary-foreground border-primary shadow-sm;
+  }
+
+  /* Mood button */
+  .mood-btn {
+    @apply flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 cursor-pointer transition-all duration-300 min-w-[88px];
+  }
+  .mood-btn:hover {
+    @apply -translate-y-0.5 shadow-sm;
+  }
+  .mood-btn.selected {
+    @apply border-primary bg-primary/10 shadow-sm;
+    animation: soft-glow 2.8s ease-in-out infinite;
+  }
+}
