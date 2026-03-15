@@ -14,13 +14,158 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      answers: {
+        Row: {
+          answer_order: number
+          created_at: string
+          id: string
+          question_id: string
+          responder_id: string
+          text: string
+        }
+        Insert: {
+          answer_order: number
+          created_at?: string
+          id?: string
+          question_id: string
+          responder_id: string
+          text: string
+        }
+        Update: {
+          answer_order?: number
+          created_at?: string
+          id?: string
+          question_id?: string
+          responder_id?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      questions: {
+        Row: {
+          asker_id: string
+          claimed_at: string | null
+          claimed_by: string | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          status: string
+          text: string
+        }
+        Insert: {
+          asker_id: string
+          claimed_at?: string | null
+          claimed_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          text: string
+        }
+        Update: {
+          asker_id?: string
+          claimed_at?: string | null
+          claimed_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          text?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          answer_id: string | null
+          created_at: string
+          id: string
+          question_id: string | null
+          reason: string | null
+          reporter_id: string
+        }
+        Insert: {
+          answer_id?: string | null
+          created_at?: string
+          id?: string
+          question_id?: string | null
+          reason?: string | null
+          reporter_id: string
+        }
+        Update: {
+          answer_id?: string | null
+          created_at?: string
+          id?: string
+          question_id?: string | null
+          reason?: string | null
+          reporter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_answer_id_fkey"
+            columns: ["answer_id"]
+            isOneToOne: false
+            referencedRelation: "answers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      ask_question: { Args: { p_text: string }; Returns: string }
+      get_and_claim_random: {
+        Args: never
+        Returns: {
+          question_id: string
+          question_text: string
+        }[]
+      }
+      get_final_chain: {
+        Args: { p_qid: string }
+        Returns: {
+          answer_order: number
+          answer_text: string
+        }[]
+      }
+      submit_answer: {
+        Args: { p_qid: string; p_text: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
