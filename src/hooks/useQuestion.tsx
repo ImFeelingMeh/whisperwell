@@ -41,7 +41,20 @@ export const useQuestion = (userId: string | undefined) => {
       return;
     }
 
-    setMyQuestion(data as Question | null);
+    if (data) {
+      setMyQuestion({
+        id: data.id,
+        text: data.text,
+        status: data.status as Question['status'],
+        category: (data as any).category ?? null,
+        emotion: (data as any).emotion ?? null,
+        vent_mode: (data as any).vent_mode ?? null,
+        created_at: data.created_at,
+        completed_at: data.completed_at,
+      });
+    } else {
+      setMyQuestion(null);
+    }
     
     if (data && data.status === 'complete') {
       await fetchFinalChain(data.id);
@@ -69,7 +82,7 @@ export const useQuestion = (userId: string | undefined) => {
       p_category: category || null,
       p_emotion: emotion || null,
       p_vent_mode: ventMode || null,
-    });
+    } as any);
 
     if (error) {
       toast({

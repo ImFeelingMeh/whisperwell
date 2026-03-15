@@ -12,7 +12,7 @@ export const useMoodCheckin = (userId: string | undefined) => {
     today.setHours(0, 0, 0, 0);
 
     const { data } = await supabase
-      .from('mood_checkins')
+      .from('mood_checkins' as any)
       .select('mood')
       .eq('user_id', userId)
       .gte('created_at', today.toISOString())
@@ -20,7 +20,7 @@ export const useMoodCheckin = (userId: string | undefined) => {
       .limit(1)
       .maybeSingle();
 
-    setTodayMood(data?.mood || null);
+    setTodayMood((data as any)?.mood || null);
     setLoading(false);
   };
 
@@ -28,8 +28,8 @@ export const useMoodCheckin = (userId: string | undefined) => {
     if (!userId) return;
 
     const { error } = await supabase
-      .from('mood_checkins')
-      .insert({ user_id: userId, mood });
+      .from('mood_checkins' as any)
+      .insert({ user_id: userId, mood } as any);
 
     if (!error) {
       setTodayMood(mood);
