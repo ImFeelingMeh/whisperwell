@@ -151,8 +151,11 @@ export type Database = {
       get_and_claim_random: {
         Args: never
         Returns: {
+          question_category: string
+          question_emotion: string
           question_id: string
           question_text: string
+          question_vent_mode: string
         }[]
       }
       get_final_chain: {
