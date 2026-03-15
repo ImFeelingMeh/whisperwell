@@ -5,6 +5,9 @@ import { useToast } from '@/hooks/use-toast';
 interface ClaimedQuestion {
   question_id: string;
   question_text: string;
+  question_category: string | null;
+  question_emotion: string | null;
+  question_vent_mode: string | null;
 }
 
 export const useAnswer = (userId: string | undefined) => {
@@ -22,7 +25,7 @@ export const useAnswer = (userId: string | undefined) => {
       console.error('Error claiming question:', error);
       toast({
         title: "Oops",
-        description: "Could not find a question right now. Try again later.",
+        description: "Could not find a whisper right now. Try again later.",
         variant: "destructive",
       });
       setLoading(false);
@@ -30,7 +33,7 @@ export const useAnswer = (userId: string | undefined) => {
     }
 
     if (data && data.length > 0 && data[0].question_text?.trim()) {
-      setClaimedQuestion(data[0]);
+      setClaimedQuestion(data[0] as ClaimedQuestion);
     } else {
       setClaimedQuestion(null);
     }
@@ -39,7 +42,7 @@ export const useAnswer = (userId: string | undefined) => {
   };
 
   const submitAnswer = async (text: string) => {
-    if (!claimedQuestion) return;
+    if (!claimedQuestion) return { error: new Error('No question') };
 
     const { error } = await supabase.rpc('submit_answer', {
       p_qid: claimedQuestion.question_id,
@@ -55,7 +58,6 @@ export const useAnswer = (userId: string | undefined) => {
       return { error };
     }
 
-    // Clear the current question and fetch a new one
     setClaimedQuestion(null);
     await getRandomQuestion();
     
@@ -66,7 +68,6 @@ export const useAnswer = (userId: string | undefined) => {
     if (userId) {
       getRandomQuestion();
 
-      // Subscribe to realtime updates for new questions
       const channel = supabase
         .channel('answer-updates')
         .on(
@@ -77,9 +78,8 @@ export const useAnswer = (userId: string | undefined) => {
             table: 'questions'
           },
           (payload) => {
-            // When questions change, try to get a new one if we don't have one
             if (!claimedQuestion || payload.eventType === 'INSERT' || 
-                (payload.eventType === 'UPDATE' && payload.new.status === 'open')) {
+                (payload.eventType === 'UPDATE' && (payload.new as any).status === 'open')) {
               getRandomQuestion();
             }
           }

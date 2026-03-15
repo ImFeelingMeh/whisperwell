@@ -6,6 +6,9 @@ interface Question {
   id: string;
   text: string;
   status: 'open' | 'claimed' | 'complete';
+  category: string | null;
+  emotion: string | null;
+  vent_mode: string | null;
   created_at: string;
   completed_at: string | null;
 }
@@ -38,9 +41,21 @@ export const useQuestion = (userId: string | undefined) => {
       return;
     }
 
-    setMyQuestion(data as Question | null);
+    if (data) {
+      setMyQuestion({
+        id: data.id,
+        text: data.text,
+        status: data.status as Question['status'],
+        category: (data as any).category ?? null,
+        emotion: (data as any).emotion ?? null,
+        vent_mode: (data as any).vent_mode ?? null,
+        created_at: data.created_at,
+        completed_at: data.completed_at,
+      });
+    } else {
+      setMyQuestion(null);
+    }
     
-    // If complete, fetch the final chain
     if (data && data.status === 'complete') {
       await fetchFinalChain(data.id);
     }
@@ -61,10 +76,13 @@ export const useQuestion = (userId: string | undefined) => {
     setAnswers(data || []);
   };
 
-  const askQuestion = async (text: string) => {
+  const askQuestion = async (text: string, category?: string, emotion?: string, ventMode?: string) => {
     const { data, error } = await supabase.rpc('ask_question', {
-      p_text: text
-    });
+      p_text: text,
+      p_category: category || null,
+      p_emotion: emotion || null,
+      p_vent_mode: ventMode || null,
+    } as any);
 
     if (error) {
       toast({
@@ -83,7 +101,6 @@ export const useQuestion = (userId: string | undefined) => {
     if (userId) {
       fetchMyQuestion();
 
-      // Subscribe to realtime updates for questions
       const channel = supabase
         .channel('question-updates')
         .on(

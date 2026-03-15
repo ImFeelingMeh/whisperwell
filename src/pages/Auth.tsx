@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Droplets } from 'lucide-react';
+import { Droplet } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Auth = () => {
@@ -18,7 +18,7 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = isSignUp 
+    const { error } = isSignUp
       ? await signUp(email, password)
       : await signIn(email, password);
 
@@ -34,57 +34,55 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background via-background to-well/5">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-well/5 blur-3xl" />
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/4 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] rounded-full bg-accent/4 blur-3xl" />
       </div>
-      
-      <Card className="w-full max-w-md shadow-xl border-2 relative z-10 backdrop-blur-sm bg-card/95">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-well/20 to-well-light/20 flex items-center justify-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-well/5 animate-pulse" />
-            <Droplets className="w-10 h-10 text-well relative z-10" />
+
+      <Card className="w-full max-w-sm shadow-lg border relative z-10 bg-card/95 backdrop-blur-sm">
+        <CardHeader className="text-center space-y-3 pb-2">
+          <div className="mx-auto w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+            <Droplet className="w-7 h-7 text-primary" />
           </div>
-          <CardTitle className="text-4xl font-bold bg-gradient-to-br from-well to-well-light bg-clip-text text-transparent">
+          <CardTitle className="text-2xl font-display font-bold text-primary">
             WhisperWell
           </CardTitle>
-          <CardDescription className="text-base text-muted-foreground">
-            Drop a question. Receive three whispers. <br />
-            A small, kind secret.
+          <CardDescription className="text-sm text-muted-foreground leading-relaxed">
+            A quiet space to be heard.<br />
+            Drop a whisper. Hear kind voices echo back.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-3">
-              <Input
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="text-base h-11"
-              />
-              <Input
-                type="password"
-                placeholder="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="text-base h-11"
-              />
-            </div>
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <Input
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="h-11"
+            />
+            <Input
+              type="password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="h-11"
+            />
             <Button
               type="submit"
-              className="w-full text-base h-11"
+              className="w-full h-11 font-display font-semibold"
               disabled={loading}
             >
-              {loading ? 'Please wait...' : isSignUp ? 'Create Account' : 'Sign In'}
+              {loading ? 'Please wait…' : isSignUp ? 'Create Account' : 'Sign In'}
             </Button>
             <Button
               type="button"
               variant="ghost"
-              className="w-full text-sm"
+              className="w-full text-sm text-muted-foreground"
               onClick={() => setIsSignUp(!isSignUp)}
             >
               {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
