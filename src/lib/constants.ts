@@ -35,13 +35,13 @@ export const RESPONSE_PROMPTS = [
 ] as const;
 
 export const MOODS = [
-  { value: 'good', label: 'Good', emoji: '😊', color: 'teal' },
-  { value: 'okay', label: 'Okay', emoji: '😐', color: 'amber' },
-  { value: 'struggling', label: 'Struggling', emoji: '😔', color: 'lavender' },
+  { value: 'good', label: 'Good', color: 'teal' },
+  { value: 'okay', label: 'Okay', color: 'amber' },
+  { value: 'struggling', label: 'Struggling', color: 'lavender' },
 ] as const;
 
 export const REACTION_TYPES = [
-  { value: 'helpful', emoji: '❤️', label: 'Helpful' },
-  { value: 'relatable', emoji: '🤝', label: 'Relatable' },
-  { value: 'encouraging', emoji: '🌱', label: 'Encouraging' },
+  { value: 'helpful', label: 'Helpful' },
+  { value: 'relatable', label: 'Relatable' },
+  { value: 'encouraging', label: 'Encouraging' },
 ] as const;

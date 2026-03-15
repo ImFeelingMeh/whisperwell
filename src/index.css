@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -111,7 +111,7 @@
 /* Animations */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-4px); }
 }
 
 @keyframes shimmer {
@@ -122,6 +122,11 @@
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes soft-glow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.08); }
+  50% { box-shadow: 0 8px 24px -16px hsl(var(--primary) / 0.35); }
 }
 
 @keyframes gentle-pulse {
@@ -153,6 +158,7 @@
 }
 .animate-fade-in-up { animation: fade-in-up 0.5s ease-out; }
 .animate-gentle-pulse { animation: gentle-pulse 3s ease-in-out infinite; }
+.animate-soft-glow { animation: soft-glow 3.2s ease-in-out infinite; }
 
 @layer components {
   /* Well visual */
@@ -239,12 +245,13 @@
 
   /* Mood button */
   .mood-btn {
-    @apply flex flex-col items-center gap-1.5 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300;
+    @apply flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 cursor-pointer transition-all duration-300 min-w-[88px];
   }
   .mood-btn:hover {
-    @apply scale-105 shadow-md;
+    @apply -translate-y-0.5 shadow-sm;
   }
   .mood-btn.selected {
-    @apply border-primary bg-primary/10 shadow-md scale-105;
+    @apply border-primary bg-primary/10 shadow-sm;
+    animation: soft-glow 2.8s ease-in-out infinite;
   }
 }
