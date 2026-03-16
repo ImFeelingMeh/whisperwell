@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface FeedWhisper {
   id: string;
+  asker_id?: string;
   text: string;
   category: string | null;
   emotion: string | null;
@@ -24,32 +25,84 @@ interface ModerationItem {
 export const useWhispers = (userId: string | undefined) => {
   const [feed, setFeed] = useState<FeedWhisper[]>([]);
   const [responsesDone, setResponsesDone] = useState(0);
-  const [responsesRemaining, setResponsesRemaining] = useState(3);
+  const [responsesRemaining, setResponsesRemaining] = useState(0);
   const [moderationQueue, setModerationQueue] = useState<ModerationItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchFeed = useCallback(async () => {
-    const { data } = await supabase.rpc('get_public_whispers' as any, { p_limit: 25 } as any);
-    setFeed((data || []) as FeedWhisper[]);
+    const { data, error } = await supabase.rpc('get_public_whispers' as any, { p_limit: 25 } as any);
+
+    if (!error) {
+      setFeed((data || []) as FeedWhisper[]);
+      return;
+    }
+
+    const fallback = await supabase
+      .from('questions')
+      .select('id, asker_id, text, category, emotion, vent_mode, status, created_at')
+      .in('status', ['open', 'claimed'])
+      .neq('asker_id', userId as any)
+      .order('created_at', { ascending: false })
+      .limit(25);
+
+    const rows = (fallback.data || []).map((row: any) => ({
+      ...row,
+      answer_count: 0,
+    })) as FeedWhisper[];
+
+    setFeed(rows);
   }, []);
 
   const fetchReciprocity = useCallback(async () => {
     if (!userId) return;
 
-    const { data } = await supabase.rpc('get_reciprocity_progress' as any);
+    const { data, error } = await supabase.rpc('get_reciprocity_progress' as any);
+
+    if (error) {
+      const { data: latestQuestion } = await supabase
+        .from('questions')
+        .select('created_at')
+        .eq('asker_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (!latestQuestion?.created_at) {
+        setResponsesDone(0);
+        setResponsesRemaining(0);
+        return;
+      }
+
+      const { count } = await supabase
+        .from('answers')
+        .select('*', { count: 'exact', head: true })
+        .eq('responder_id', userId)
+        .gt('created_at', latestQuestion.created_at);
+
+      const done = Math.min(count || 0, 3);
+      setResponsesDone(done);
+      setResponsesRemaining(Math.max(3 - done, 0));
+      return;
+    }
+
     const progress = data?.[0];
 
     setResponsesDone(progress?.responses_done ?? 0);
-    setResponsesRemaining(progress?.responses_remaining ?? 3);
+    setResponsesRemaining(progress?.responses_remaining ?? 0);
   }, [userId]);
 
   const fetchModerationQueue = useCallback(async () => {
-    const { data } = await (supabase as any)
+    const { data, error } = await (supabase as any)
       .from('moderation_queue' as any)
       .select('id, content_type, reason, source, status, created_at')
       .eq('status', 'open')
       .order('created_at', { ascending: false })
       .limit(5);
+
+    if (error) {
+      setModerationQueue([]);
+      return;
+    }
 
     setModerationQueue(((data || []) as unknown) as ModerationItem[]);
   }, []);

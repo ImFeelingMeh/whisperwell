@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAnswer } from '@/hooks/useAnswer';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,6 +10,12 @@ import { useToast } from '@/hooks/use-toast';
 interface RespondToWhispersProps {
   userId: string;
   onBack: () => void;
+  initialWhisper: {
+    id: string;
+    text: string;
+    category: string | null;
+    emotion: string | null;
+  } | null;
   responsesDone: number;
   responsesRemaining: number;
   onAnswerSubmitted: () => Promise<void>;
@@ -19,16 +25,29 @@ interface RespondToWhispersProps {
 const RespondToWhispers = ({
   userId,
   onBack,
+  initialWhisper,
   responsesDone,
   responsesRemaining,
   onAnswerSubmitted,
   onReportQuestion,
 }: RespondToWhispersProps) => {
-  const { claimedQuestion, loading, submitAnswer } = useAnswer(userId);
+  const { claimedQuestion, loading, submitAnswer, setManualQuestion } = useAnswer(userId);
   const [answerText, setAnswerText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [activePrompt, setActivePrompt] = useState<number | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (!initialWhisper) return;
+
+    setManualQuestion({
+      question_id: initialWhisper.id,
+      question_text: initialWhisper.text,
+      question_category: initialWhisper.category,
+      question_emotion: initialWhisper.emotion,
+      question_vent_mode: null,
+    });
+  }, [initialWhisper, setManualQuestion]);
 
   const handleSubmit = async () => {
     if (!answerText.trim()) return;
@@ -71,10 +90,15 @@ const RespondToWhispers = ({
             <div className="well-visual mb-6 animate-float mx-auto" style={{ width: 120, height: 120 }}>
               <div className="well-opening" style={{ opacity: 0.4 }} />
             </div>
-            {responsesRemaining === 0 ? (
+            {responsesRemaining === 0 && responsesDone >= 3 ? (
               <>
                 <p className="text-lg font-display text-primary mb-1">You helped three voices today.</p>
                 <p className="text-sm text-muted-foreground">Your whisper can now enter the well.</p>
+              </>
+            ) : responsesRemaining === 0 ? (
+              <>
+                <p className="text-lg font-display text-muted-foreground mb-1">No whispers available right now</p>
+                <p className="text-sm text-muted-foreground">Check back soon, or drop your own whisper now.</p>
               </>
             ) : (
               <>
@@ -105,8 +129,8 @@ const RespondToWhispers = ({
 
   return (
     <div className="space-y-4 animate-fade-in-up">
-      <button onClick={onBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="w-4 h-4" /> Back
+      <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground">
+        Back
       </button>
 
       <Card className="border shadow-lg">
