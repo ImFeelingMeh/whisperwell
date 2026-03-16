@@ -39,8 +39,8 @@ const DropWhisper = ({
 
     if (responsesRemaining > 0) {
       toast({
-        title: 'Help three others first',
-        description: `You still need ${responsesRemaining} response${responsesRemaining === 1 ? '' : 's'} before posting.`,
+        title: 'Cooldown active',
+        description: `Answer ${responsesRemaining} more whisper${responsesRemaining === 1 ? '' : 's'} before your next drop.`,
       });
       return;
     }
@@ -80,7 +80,7 @@ const DropWhisper = ({
   }
 
   // Show completed answers
-  if (myQuestion?.status === 'complete' && answers.length === 3 && showCompleted) {
+  if (myQuestion?.status === 'complete' && answers.length > 0 && showCompleted) {
     return (
       <div className="space-y-4 animate-fade-in-up">
         <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground">
@@ -209,7 +209,9 @@ const DropWhisper = ({
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="rounded-lg border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
-            Before your whisper enters the well, help three others first. Remaining: {responsesRemaining}
+            {responsesRemaining > 0
+              ? `Cooldown: answer ${responsesRemaining} more whisper${responsesRemaining === 1 ? '' : 's'} before your next drop.`
+              : 'You can drop a whisper now. After posting, answer three whispers before your next drop.'}
           </div>
 
           <div>
@@ -304,7 +306,7 @@ const DropWhisper = ({
           </Button>
 
           <p className="text-xs text-muted-foreground text-center">
-            Reciprocity keeps the well supportive and thoughtful.
+            Reciprocity applies after each drop to keep the well supportive and thoughtful.
           </p>
         </CardContent>
       </Card>

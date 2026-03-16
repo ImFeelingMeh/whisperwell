@@ -75,16 +75,35 @@ export const useQuestion = (userId: string | undefined) => {
       return;
     }
 
-    setAnswers((data || []) as Answer[]);
+    const normalized = ((data || []) as any[]).map((row, index) => ({
+      answer_id: row.answer_id ?? row.id ?? `${questionId}-${row.answer_order ?? index + 1}`,
+      answer_text: row.answer_text ?? row.text ?? '',
+      answer_order: row.answer_order ?? index + 1,
+      my_reaction: row.my_reaction ?? null,
+    })) as Answer[];
+
+    setAnswers(normalized);
   };
 
   const askQuestion = async (text: string, category?: string, emotion?: string, ventMode?: string) => {
-    const { data, error } = await supabase.rpc('ask_question', {
+    const primary = await supabase.rpc('ask_question', {
       p_text: text,
       p_category: category || null,
       p_emotion: emotion || null,
       p_vent_mode: ventMode || null,
     } as any);
+
+    let data = primary.data;
+    let error = primary.error;
+
+    if (error && /ask_question|function|parameters|schema cache/i.test(error.message)) {
+      const legacy = await supabase.rpc('ask_question', {
+        p_text: text,
+      } as any);
+
+      data = legacy.data;
+      error = legacy.error;
+    }
 
     if (error) {
       toast({

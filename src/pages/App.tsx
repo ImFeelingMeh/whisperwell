@@ -11,9 +11,18 @@ import { useToast } from '@/hooks/use-toast';
 
 type View = 'home' | 'drop' | 'respond';
 
+type SelectedWhisper = {
+  id: string;
+  asker_id?: string;
+  text: string;
+  category: string | null;
+  emotion: string | null;
+};
+
 const AppPage = () => {
   const { user, signOut } = useAuth();
   const [view, setView] = useState<View>('home');
+  const [selectedWhisper, setSelectedWhisper] = useState<SelectedWhisper | null>(null);
   const { toast } = useToast();
 
   const {
@@ -117,13 +126,16 @@ const AppPage = () => {
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {responsesRemaining === 0
                       ? 'Your whisper is ready to enter the well'
-                      : `${responsesRemaining} more response${responsesRemaining === 1 ? '' : 's'} needed first`}
+                      : `Cooldown: ${responsesRemaining} response${responsesRemaining === 1 ? '' : 's'} left before next drop`}
                   </p>
                 </div>
               </button>
 
               <button
-                onClick={() => setView('respond')}
+                onClick={() => {
+                  setSelectedWhisper(null);
+                  setView('respond');
+                }}
                 className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-border bg-card hover:border-accent/30 hover:shadow-md transition-all duration-300 group"
               >
                 <div className="w-12 h-2 rounded-full bg-accent/25 group-hover:bg-accent/35 transition-colors" />
@@ -136,7 +148,17 @@ const AppPage = () => {
 
             <VoicesFromWell
               whispers={feed.slice(0, 8)}
-              onRespond={() => setView('respond')}
+              onRespond={(whisper) => {
+                if (whisper.asker_id === user.id) {
+                  toast({
+                    title: 'Cannot answer your own whisper',
+                    description: 'Choose another whisper from the well.',
+                  });
+                  return;
+                }
+                setSelectedWhisper(whisper);
+                setView('respond');
+              }}
               onReport={(questionId) => handleReportQuestion(questionId)}
             />
 
@@ -175,6 +197,7 @@ const AppPage = () => {
           <RespondToWhispers
             userId={user.id}
             onBack={() => setView('home')}
+            initialWhisper={selectedWhisper}
             responsesDone={responsesDone}
             responsesRemaining={responsesRemaining}
             onAnswerSubmitted={refreshAll}

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 
 interface FeedWhisper {
   id: string;
+  asker_id?: string;
   text: string;
   category: string | null;
   emotion: string | null;
@@ -12,7 +13,7 @@ interface FeedWhisper {
 
 interface VoicesFromWellProps {
   whispers: FeedWhisper[];
-  onRespond: () => void;
+  onRespond: (whisper: FeedWhisper) => void;
   onReport: (questionId: string) => void;
 }
 
@@ -52,7 +53,7 @@ const VoicesFromWell = ({ whispers, onRespond, onReport }: VoicesFromWellProps) 
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <Button size="sm" variant="outline" onClick={onRespond}>
+                  <Button size="sm" variant="outline" onClick={() => onRespond(whisper)}>
                     Respond
                   </Button>
                   <button
