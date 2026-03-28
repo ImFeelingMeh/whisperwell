@@ -9,22 +9,30 @@ interface FeedWhisper {
   text: string;
   category: string | null;
   emotion: string | null;
+  vent_mode?: string | null;
 }
 
 interface VoicesFromWellProps {
   whispers: FeedWhisper[];
   onRespond: (whisper: FeedWhisper) => void;
   onReport: (questionId: string) => void;
+  onRefresh: () => Promise<void>;
 }
 
-const VoicesFromWell = ({ whispers, onRespond, onReport }: VoicesFromWellProps) => {
+const VoicesFromWell = ({ whispers, onRespond, onReport, onRefresh }: VoicesFromWellProps) => {
   return (
-    <Card className="border shadow-sm bg-card/90">
+    <Card className="panel-surface">
       <CardHeader className="pb-3">
-        <CardTitle className="text-base font-display text-primary">Voices from the Well</CardTitle>
+        <div className="flex items-center justify-between gap-3">
+          <CardTitle className="text-base font-display text-primary">Voices from the Well</CardTitle>
+          <button onClick={onRefresh} className="text-xs text-muted-foreground hover:text-foreground">
+            Refresh voices
+          </button>
+        </div>
+        <p className="text-xs text-muted-foreground">Showing up to 8 voices for a calm, intentional pace.</p>
       </CardHeader>
       <CardContent>
-        <div className="max-h-64 overflow-y-auto space-y-3 pr-1">
+        <div className="max-h-[360px] lg:max-h-[520px] overflow-y-auto space-y-3 pr-1">
           {whispers.length === 0 && (
             <p className="text-sm text-muted-foreground">The well is quiet right now.</p>
           )}
@@ -36,9 +44,16 @@ const VoicesFromWell = ({ whispers, onRespond, onReport }: VoicesFromWellProps) 
             const category = whisper.category
               ? CATEGORIES.find((item) => item.value === whisper.category)
               : null;
+            const intent = whisper.vent_mode
+              ? {
+                  advice: 'I want advice',
+                  vent: 'I just want to vent',
+                  encouragement: 'I need encouragement',
+                }[whisper.vent_mode]
+              : null;
 
             return (
-              <div key={whisper.id} className="rounded-xl border bg-background/70 p-3 space-y-2">
+              <div key={whisper.id} className="rounded-xl border bg-background/80 p-3.5 space-y-2.5">
                 <p className="text-sm leading-relaxed">{whisper.text}</p>
                 <div className="flex flex-wrap gap-2">
                   {emotion && (
@@ -51,9 +66,14 @@ const VoicesFromWell = ({ whispers, onRespond, onReport }: VoicesFromWellProps) 
                       {category.label}
                     </span>
                   )}
+                  {intent && (
+                    <span className="emotion-tag bg-muted text-muted-foreground">
+                      {intent}
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <Button size="sm" variant="outline" onClick={() => onRespond(whisper)}>
+                  <Button size="sm" variant="outline" className="rounded-full px-4" onClick={() => onRespond(whisper)}>
                     Respond
                   </Button>
                   <button

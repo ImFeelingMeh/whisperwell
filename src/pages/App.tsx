@@ -8,6 +8,7 @@ import VoicesFromWell from '@/components/VoicesFromWell';
 import ModerationQueueCard from '@/components/ModerationQueueCard';
 import { useWhispers } from '@/hooks/useWhispers';
 import { useToast } from '@/hooks/use-toast';
+import { useTheme } from '@/components/ThemeProvider';
 
 type View = 'home' | 'drop' | 'respond';
 
@@ -17,10 +18,12 @@ type SelectedWhisper = {
   text: string;
   category: string | null;
   emotion: string | null;
+  vent_mode?: string | null;
 };
 
 const AppPage = () => {
   const { user, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [view, setView] = useState<View>('home');
   const [selectedWhisper, setSelectedWhisper] = useState<SelectedWhisper | null>(null);
   const { toast } = useToast();
@@ -38,6 +41,12 @@ const AppPage = () => {
   } = useWhispers(user?.id);
 
   if (!user) return null;
+
+  const returnPrompts = [
+    'Someone could use your voice today.',
+    'Your words helped someone yesterday.',
+  ] as const;
+  const dayIndex = new Date().getDate() % returnPrompts.length;
 
   const askReportReason = () => {
     const value = window.prompt('Report reason: harassment, hateful content, harmful advice, or spam', 'harassment');
@@ -90,95 +99,140 @@ const AppPage = () => {
 
       {/* Header */}
       <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-10">
-        <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="app-shell py-3 flex items-center justify-between gap-3">
           <button onClick={() => setView('home')} className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-primary" />
             <h1 className="text-lg font-display font-bold text-primary">
               WhisperWell
             </h1>
           </button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={signOut}
-            className="text-muted-foreground hover:text-foreground"
-          >
-            Sign out
-          </Button>
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="inline-flex rounded-full border bg-background/80 p-1">
+              <button
+                onClick={() => setTheme('light')}
+                className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${
+                  theme === 'light'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Light
+              </button>
+              <button
+                onClick={() => setTheme('dark')}
+                className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Dark
+              </button>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={signOut}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Sign out
+            </Button>
+          </div>
         </div>
       </header>
 
       {/* Main */}
-      <main className="max-w-lg mx-auto px-4 py-6 relative z-10">
+      <main className={`app-shell py-6 relative z-10 ${view === 'home' ? '' : 'max-w-3xl'}`}>
         {view === 'home' && (
-          <div className="space-y-5 animate-fade-in-up">
-            <MoodCheckin userId={user.id} />
+          <div className="space-y-4 animate-fade-in-up">
+            <section className="panel-surface px-4 py-4">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-heading mb-1">Today</p>
+                  <p className="text-sm text-foreground/90">A calm place to share, listen, and support.</p>
+                  <p className="text-xs text-muted-foreground mt-2">{returnPrompts[dayIndex]}</p>
+                </div>
+                <div className="w-full md:w-72 space-y-2">
+                  <p className="text-xs text-muted-foreground">You\'ve helped {Math.min(responsesDone, 3)} of 3 people before your next whisper.</p>
+                  <div className="progress-track">
+                    <div className="progress-fill" style={{ width: `${(Math.min(responsesDone, 3) / 3) * 100}%` }} />
+                  </div>
+                </div>
+              </div>
+            </section>
 
-            {/* Actions */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => setView('drop')}
-                className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-border bg-card hover:border-primary/30 hover:shadow-md transition-all duration-300 group"
-              >
-                <div className="w-12 h-2 rounded-full bg-primary/20 group-hover:bg-primary/30 transition-colors" />
-                <div className="text-center">
-                  <p className="font-display font-semibold text-sm text-foreground">Drop a whisper</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {responsesRemaining === 0
-                      ? 'Your whisper is ready to enter the well'
-                      : `Cooldown: ${responsesRemaining} response${responsesRemaining === 1 ? '' : 's'} left before next drop`}
+            <div className="home-grid">
+              <div className="home-main">
+                <MoodCheckin userId={user.id} />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setView('drop')}
+                    className="action-tile group"
+                  >
+                    <div className="action-marker bg-primary/25 group-hover:bg-primary/35" />
+                    <div className="min-w-0">
+                      <p className="font-display font-semibold text-sm text-foreground">Drop a whisper</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {responsesRemaining === 0
+                          ? 'Your whisper is ready to enter the well'
+                          : `Cooldown: ${responsesRemaining} response${responsesRemaining === 1 ? '' : 's'} left before next drop`}
+                      </p>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSelectedWhisper(null);
+                      setView('respond');
+                    }}
+                    className="action-tile group"
+                  >
+                    <div className="action-marker bg-accent/30 group-hover:bg-accent/40" />
+                    <div className="min-w-0">
+                      <p className="font-display font-semibold text-sm text-foreground">Respond to whispers</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Help someone feel less alone</p>
+                    </div>
+                  </button>
+                </div>
+
+                {!loading && responsesDone >= 3 && (
+                  <div className="rounded-xl border bg-primary/5 px-4 py-3 text-sm text-primary">
+                    You helped three people feel less alone. Your whisper is now entering the well.
+                  </div>
+                )}
+              </div>
+
+              <div className="home-side">
+                <VoicesFromWell
+                  whispers={feed.slice(0, 8)}
+                  onRefresh={refreshAll}
+                  onRespond={(whisper) => {
+                    if (whisper.asker_id === user.id) {
+                      toast({
+                        title: 'Cannot answer your own whisper',
+                        description: 'Choose another whisper from the well.',
+                      });
+                      return;
+                    }
+                    setSelectedWhisper(whisper);
+                    setView('respond');
+                  }}
+                  onReport={(questionId) => handleReportQuestion(questionId)}
+                />
+
+                <div className="panel-surface text-center py-6 px-4">
+                  <div className="well-visual mb-4 animate-float mx-auto" style={{ width: 100, height: 100 }}>
+                    <div className="well-opening" style={{ opacity: 0.3 }} />
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
+                    Share honestly, then return to support one voice at a time.
                   </p>
                 </div>
-              </button>
 
-              <button
-                onClick={() => {
-                  setSelectedWhisper(null);
-                  setView('respond');
-                }}
-                className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-border bg-card hover:border-accent/30 hover:shadow-md transition-all duration-300 group"
-              >
-                <div className="w-12 h-2 rounded-full bg-accent/25 group-hover:bg-accent/35 transition-colors" />
-                <div className="text-center">
-                  <p className="font-display font-semibold text-sm text-foreground">Respond to whispers</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Help someone feel less alone</p>
-                </div>
-              </button>
-            </div>
-
-            <VoicesFromWell
-              whispers={feed.slice(0, 8)}
-              onRespond={(whisper) => {
-                if (whisper.asker_id === user.id) {
-                  toast({
-                    title: 'Cannot answer your own whisper',
-                    description: 'Choose another whisper from the well.',
-                  });
-                  return;
-                }
-                setSelectedWhisper(whisper);
-                setView('respond');
-              }}
-              onReport={(questionId) => handleReportQuestion(questionId)}
-            />
-
-            <ModerationQueueCard items={moderationQueue} />
-
-            {/* Gentle message */}
-            <div className="text-center py-6">
-              <div className="well-visual mb-4 animate-float mx-auto" style={{ width: 100, height: 100 }}>
-                <div className="well-opening" style={{ opacity: 0.3 }} />
+                <ModerationQueueCard items={moderationQueue} />
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
-                Throw a whisper into the well and hear kind voices echo back.
-              </p>
             </div>
-
-            {!loading && responsesDone >= 3 && (
-              <div className="rounded-xl border bg-primary/5 px-4 py-3 text-sm text-primary text-center">
-                You helped three voices today. Your whisper can now enter the well.
-              </div>
-            )}
           </div>
         )}
 

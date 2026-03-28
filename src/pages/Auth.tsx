@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { useTheme } from '@/components/ThemeProvider';
 
 const Auth = () => {
   const [loading, setLoading] = useState(false);
@@ -11,8 +12,16 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [onboardingStep, setOnboardingStep] = useState(0);
+  const { theme, setTheme } = useTheme();
   const { signInAnonymously, signIn, signUp } = useAuth();
   const { toast } = useToast();
+
+  const onboardingMessages = [
+    'WhisperWell is a place to feel less alone.',
+    'Share what\'s on your mind anonymously.',
+    'Support others and receive support in return.',
+  ] as const;
 
   const handleAnonymousSignIn = async () => {
     setLoading(true);
@@ -54,6 +63,29 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <div className="fixed top-4 right-4 z-20 inline-flex rounded-full border bg-background/85 p-1 backdrop-blur-sm">
+        <button
+          onClick={() => setTheme('light')}
+          className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${
+            theme === 'light'
+              ? 'bg-primary text-primary-foreground'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          Light
+        </button>
+        <button
+          onClick={() => setTheme('dark')}
+          className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${
+            theme === 'dark'
+              ? 'bg-primary text-primary-foreground'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          Dark
+        </button>
+      </div>
+
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/4 blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] rounded-full bg-accent/4 blur-3xl" />
@@ -71,7 +103,46 @@ const Auth = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className="space-y-4">
+            {onboardingStep < onboardingMessages.length ? (
+              <div className="rounded-xl border bg-muted/35 px-4 py-4 text-center">
+                <p className="text-sm text-foreground">{onboardingMessages[onboardingStep]}</p>
+                <div className="mt-3 flex items-center justify-center gap-1.5">
+                  {onboardingMessages.map((_, idx) => (
+                    <span
+                      key={idx}
+                      className={`h-1.5 rounded-full transition-all ${idx === onboardingStep ? 'w-5 bg-primary' : 'w-2 bg-border'}`}
+                    />
+                  ))}
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="mt-4 w-full"
+                  onClick={() => setOnboardingStep((step) => step + 1)}
+                >
+                  Next
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => setOnboardingStep(onboardingMessages.length + 1)}
+              >
+                Enter the well
+              </Button>
+            )}
+
+            {onboardingStep <= onboardingMessages.length && (
+              <p className="text-xs text-center text-muted-foreground">
+                Complete onboarding to continue.
+              </p>
+            )}
+
+            {onboardingStep > onboardingMessages.length && (
+              <>
             <Button
               type="button"
               className="w-full h-11 font-display font-semibold"
@@ -126,6 +197,8 @@ const Auth = () => {
             <p className="text-xs text-center text-muted-foreground">
               No username, no public profile, no visible identity.
             </p>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>

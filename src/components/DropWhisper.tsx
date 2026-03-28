@@ -26,16 +26,22 @@ const DropWhisper = ({
 }: DropWhisperProps) => {
   const { myQuestion, answers, loading, askQuestion } = useQuestion(userId);
   const [text, setText] = useState('');
-  const [category, setCategory] = useState('');
-  const [emotion, setEmotion] = useState('');
-  const [ventMode, setVentMode] = useState('');
+  const [category, setCategory] = useState(''); // Category (required)
+  const [emotion, setEmotion] = useState(''); // Emotion (required)
+  const [ventMode, setVentMode] = useState(''); // Intent (required)
   const [submitting, setSubmitting] = useState(false);
   const [dropping, setDropping] = useState(false);
   const [showCompleted, setShowCompleted] = useState(true);
   const { toast } = useToast();
 
   const handleSubmit = async () => {
-    if (!text.trim()) return;
+    if (!text.trim() || !category || !emotion || !ventMode) {
+      toast({
+        title: 'Almost there',
+        description: 'Please add a category, emotion, and intent before sending into the well.',
+      });
+      return;
+    }
 
     if (responsesRemaining > 0) {
       toast({
@@ -86,10 +92,10 @@ const DropWhisper = ({
         <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground">
           Back
         </button>
-        <Card className="border shadow-lg">
+        <Card className="panel-surface">
           <CardHeader>
             <CardTitle className="text-xl font-display text-primary">
-              Three voices answered your whisper
+              3 people took time to respond to you.
             </CardTitle>
             <CardDescription className="italic">"{myQuestion.text}"</CardDescription>
             <div className="flex gap-2 flex-wrap pt-1">
@@ -125,7 +131,7 @@ const DropWhisper = ({
                             : 'border-border text-muted-foreground hover:text-foreground'
                         }`}
                       >
-                        {reaction.label.toLowerCase()}
+                        {reaction.label}
                       </button>
                     ))}
                   </div>
@@ -172,7 +178,7 @@ const DropWhisper = ({
                 </div>
               </div>
               <p className="text-muted-foreground leading-relaxed">
-                Waiting for three kind voices to respond…
+                Waiting for voices to return with care.
               </p>
             </div>
           </CardContent>
@@ -188,7 +194,7 @@ const DropWhisper = ({
         Back
       </button>
 
-      <Card className="border shadow-lg overflow-hidden relative">
+      <Card className="panel-surface overflow-hidden relative">
         {dropping && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-card/80 backdrop-blur-sm">
             <div className="well-visual">
@@ -203,26 +209,26 @@ const DropWhisper = ({
           <CardTitle className="text-xl font-display text-primary">
             What's on your mind?
           </CardTitle>
-          <CardDescription>
-            Drop your whisper into the well. It will be answered with care.
+          <CardDescription className="text-sm leading-relaxed">
+            Write something you might not say out loud.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
-          <div className="rounded-lg border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+          <div className="rounded-xl border bg-muted/40 px-3.5 py-2.5 text-xs text-muted-foreground leading-relaxed">
             {responsesRemaining > 0
               ? `Cooldown: answer ${responsesRemaining} more whisper${responsesRemaining === 1 ? '' : 's'} before your next drop.`
-              : 'You can drop a whisper now. After posting, answer three whispers before your next drop.'}
+              : 'Before your whisper enters the well, help three others.'}
           </div>
 
           <div>
             <Textarea
-              placeholder="Write your whisper here…"
+              placeholder="What's on your mind?"
               value={text}
               onChange={(e) => setText(e.target.value)}
               disabled={submitting || dropping}
               rows={4}
               maxLength={300}
-              className="resize-none text-base"
+              className="resize-none text-base rounded-xl"
             />
             <p className="text-xs text-muted-foreground mt-1 text-right">{text.length}/300</p>
           </div>
@@ -245,8 +251,8 @@ const DropWhisper = ({
 
           {/* Category */}
           <div>
-            <p className="text-sm font-display font-semibold text-muted-foreground mb-2">Category (optional)</p>
-            <div className="flex flex-wrap gap-2">
+            <p className="text-sm font-display font-semibold text-muted-foreground mb-2">Category (required)</p>
+            <div className="flex flex-wrap gap-2.5">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.value}
@@ -261,8 +267,8 @@ const DropWhisper = ({
 
           {/* Emotion */}
           <div>
-            <p className="text-sm font-display font-semibold text-muted-foreground mb-2">How are you feeling? (optional)</p>
-            <div className="flex flex-wrap gap-2">
+            <p className="text-sm font-display font-semibold text-muted-foreground mb-2">Emotion (required)</p>
+            <div className="flex flex-wrap gap-2.5">
               {EMOTIONS.map((em) => (
                 <button
                   key={em.value}
@@ -277,8 +283,8 @@ const DropWhisper = ({
 
           {/* Vent mode */}
           <div>
-            <p className="text-sm font-display font-semibold text-muted-foreground mb-2">What kind of response do you want? (optional)</p>
-            <div className="flex flex-wrap gap-2">
+            <p className="text-sm font-display font-semibold text-muted-foreground mb-2">Intent (required)</p>
+            <div className="flex flex-wrap gap-2.5">
               {VENT_MODES.map((vm) => (
                 <button
                   key={vm.value}
@@ -293,15 +299,15 @@ const DropWhisper = ({
 
           <Button
             onClick={handleSubmit}
-            disabled={!text.trim() || submitting || dropping || responsesRemaining > 0}
-            className="w-full font-display text-base h-11"
+            disabled={!text.trim() || !category || !emotion || !ventMode || submitting || dropping || responsesRemaining > 0}
+            className="w-full font-display text-base h-11 rounded-xl"
           >
             {submitting ? (
               'Sending…'
             ) : dropping ? (
               'Dropping into the well…'
             ) : (
-              'Drop your whisper'
+              'Send into the well'
             )}
           </Button>
 
