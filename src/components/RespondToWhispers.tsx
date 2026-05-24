@@ -20,7 +20,7 @@ interface RespondToWhispersProps {
   responsesDone: number;
   responsesRemaining: number;
   onAnswerSubmitted: () => Promise<void>;
-  onReportQuestion: (questionId: string, reason: string) => Promise<void>;
+  onReportQuestion: (target: { questionId: string; snippet?: string }) => void;
 }
 
 const RespondToWhispers = ({
@@ -263,7 +263,7 @@ const RespondToWhispers = ({
           </Button>
 
           <button
-            onClick={() => onReportQuestion(claimedQuestion.question_id, 'harassment')}
+            onClick={() => onReportQuestion({ questionId: claimedQuestion.question_id, snippet: claimedQuestion.question_text })}
             className="text-xs text-muted-foreground hover:text-foreground mx-auto block"
           >
             Report this whisper

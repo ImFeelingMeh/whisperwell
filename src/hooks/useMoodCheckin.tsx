@@ -30,17 +30,13 @@ export const useMoodCheckin = (userId: string | undefined) => {
     }
 
     try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
       const todayKey = getTodayKey();
 
       const { data, error } = await supabase
         .from('mood_checkins' as any)
         .select('mood, created_at, checkin_date')
         .eq('user_id', userId)
-        .or(`checkin_date.eq.${todayKey},created_at.gte.${today.toISOString()}`)
-        .order('created_at', { ascending: false })
-        .limit(1)
+        .eq('checkin_date', todayKey)
         .maybeSingle();
 
       if (!error && (data as any)?.mood) {
@@ -69,31 +65,35 @@ export const useMoodCheckin = (userId: string | undefined) => {
 
     const todayKey = getTodayKey();
 
-    const upsertAttempt = await supabase
+    const existing = await supabase
       .from('mood_checkins' as any)
-      .upsert(
-        { user_id: userId, mood, checkin_date: todayKey } as any,
-        { onConflict: 'user_id,checkin_date' } as any,
-      );
+      .select('id')
+      .eq('user_id', userId)
+      .eq('checkin_date', todayKey)
+      .maybeSingle();
 
-    if (!upsertAttempt.error) {
-      setLastSaveSource('remote');
+    if (existing.error) {
       setSaving(false);
-      return { error: null };
+      return { error: existing.error };
     }
 
-    const insertFallback = await supabase
+    const writeResult = existing.data?.id
+      ? await supabase
+          .from('mood_checkins' as any)
+          .update({ mood } as any)
+          .eq('id', existing.data.id)
+      : await supabase
       .from('mood_checkins' as any)
-      .insert({ user_id: userId, mood } as any);
+      .insert({ user_id: userId, mood, checkin_date: todayKey } as any);
 
-    if (!insertFallback.error) {
+    if (!writeResult.error) {
       setLastSaveSource('remote');
       setSaving(false);
       return { error: null };
     }
 
     setSaving(false);
-    return { error: insertFallback.error };
+    return { error: writeResult.error };
   };
 
   useEffect(() => {

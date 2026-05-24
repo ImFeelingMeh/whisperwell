@@ -6,11 +6,14 @@ import DropWhisper from '@/components/DropWhisper';
 import RespondToWhispers from '@/components/RespondToWhispers';
 import VoicesFromWell from '@/components/VoicesFromWell';
 import ModerationQueueCard from '@/components/ModerationQueueCard';
+import ReportScreen, { type ReportTarget } from '@/components/ReportScreen';
+import MoodBuddyChat from '@/components/MoodBuddyChat';
 import { useWhispers } from '@/hooks/useWhispers';
 import { useToast } from '@/hooks/use-toast';
 import { useTheme } from '@/components/ThemeProvider';
+import { supabase } from '@/integrations/supabase/client';
 
-type View = 'home' | 'drop' | 'respond';
+type View = 'home' | 'drop' | 'respond' | 'report' | 'mood-chat';
 
 type SelectedWhisper = {
   id: string;
@@ -21,11 +24,17 @@ type SelectedWhisper = {
   vent_mode?: string | null;
 };
 
+type MoodRoomState = {
+  mood: string | null;
+};
+
 const AppPage = () => {
   const { user, signOut } = useAuth();
   const { theme, setTheme } = useTheme();
   const [view, setView] = useState<View>('home');
   const [selectedWhisper, setSelectedWhisper] = useState<SelectedWhisper | null>(null);
+  const [reportTarget, setReportTarget] = useState<ReportTarget | null>(null);
+  const [moodRoomState, setMoodRoomState] = useState<MoodRoomState>({ mood: null });
   const { toast } = useToast();
 
   const {
@@ -48,38 +57,68 @@ const AppPage = () => {
   ] as const;
   const dayIndex = new Date().getDate() % returnPrompts.length;
 
-  const askReportReason = () => {
-    const value = window.prompt('Report reason: harassment, hateful content, harmful advice, or spam', 'harassment');
-    const normalized = (value || '').trim().toLowerCase();
-    const valid = ['harassment', 'hateful content', 'harmful advice', 'spam'];
-
-    if (!valid.includes(normalized)) {
-      return null;
-    }
-
-    return normalized;
+  const openQuestionReport = ({ questionId, snippet }: { questionId: string; snippet?: string }) => {
+    setReportTarget({
+      contentType: 'question',
+      contentId: questionId,
+      snippet,
+    });
+    setView('report');
   };
 
-  const handleReportQuestion = async (questionId: string, presetReason?: string) => {
-    const reason = presetReason || askReportReason();
-    if (!reason) return;
-
-    const { error } = await reportQuestion(questionId, reason);
-    if (!error) {
-      toast({ title: 'Reported', description: 'Thanks for helping keep WhisperWell safe.' });
-      await refreshAll();
-    }
+  const openAnswerReport = ({ answerId, snippet }: { answerId: string; snippet?: string }) => {
+    setReportTarget({
+      contentType: 'answer',
+      contentId: answerId,
+      snippet,
+    });
+    setView('report');
   };
 
-  const handleReportAnswer = async (answerId: string, presetReason?: string) => {
-    const reason = presetReason || askReportReason();
-    if (!reason) return;
+  const submitReport = async (reason: string, details?: string) => {
+    if (!reportTarget) return;
 
-    const { error } = await reportAnswer(answerId, reason);
-    if (!error) {
-      toast({ title: 'Reported', description: 'Thanks for helping keep WhisperWell safe.' });
-      await refreshAll();
+    const insertPayload: any = {
+      reporter_id: user.id,
+      reason,
+      details: details || null,
+      status: 'open',
+      question_id: null,
+      answer_id: null,
+    };
+
+    if (reportTarget.contentType === 'question') {
+      insertPayload.question_id = reportTarget.contentId;
+    } else {
+      insertPayload.answer_id = reportTarget.contentId;
     }
+
+    const directInsert = await (supabase as any)
+      .from('reports' as any)
+      .insert(insertPayload as any);
+
+    let finalError = directInsert.error;
+
+    if (finalError) {
+      const fallback = reportTarget.contentType === 'question'
+        ? await reportQuestion(reportTarget.contentId, reason)
+        : await reportAnswer(reportTarget.contentId, reason);
+      finalError = fallback.error;
+    }
+
+    if (finalError) {
+      toast({
+        title: 'Could not submit report',
+        description: 'Please run the latest Supabase migration and try again.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    toast({ title: 'Report submitted', description: 'Thanks for helping keep WhisperWell safe.' });
+    setReportTarget(null);
+    setView('home');
+    await refreshAll();
   };
 
   const handleReactToAnswer = async (answerId: string, reactionType: string) => {
@@ -98,7 +137,7 @@ const AppPage = () => {
       </div>
 
       {/* Header */}
-      <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-10">
+      <header className="app-header">
         <div className="app-shell py-3 flex items-center justify-between gap-3">
           <button onClick={() => setView('home')} className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-primary" />
@@ -142,7 +181,7 @@ const AppPage = () => {
       </header>
 
       {/* Main */}
-      <main className={`app-shell py-6 relative z-10 ${view === 'home' ? '' : 'max-w-3xl'}`}>
+      <main className={`app-shell app-main ${view === 'home' ? '' : 'max-w-3xl'}`}>
         {view === 'home' && (
           <div className="space-y-4 animate-fade-in-up">
             <section className="panel-surface px-4 py-4">
@@ -163,13 +202,17 @@ const AppPage = () => {
 
             <div className="home-grid">
               <div className="home-main">
-                <MoodCheckin userId={user.id} />
+                <MoodCheckin
+                  userId={user.id}
+                  onMoodChange={(mood) => setMoodRoomState({ mood })}
+                  onOpenMoodChat={(mood) => {
+                    setMoodRoomState({ mood });
+                    setView('mood-chat');
+                  }}
+                />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setView('drop')}
-                    className="action-tile group"
-                  >
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <button onClick={() => setView('drop')} className="action-tile group">
                     <div className="action-marker bg-primary/25 group-hover:bg-primary/35" />
                     <div className="min-w-0">
                       <p className="font-display font-semibold text-sm text-foreground">Drop a whisper</p>
@@ -192,6 +235,14 @@ const AppPage = () => {
                     <div className="min-w-0">
                       <p className="font-display font-semibold text-sm text-foreground">Respond to whispers</p>
                       <p className="text-xs text-muted-foreground mt-0.5">Help someone feel less alone</p>
+                    </div>
+                  </button>
+
+                  <button onClick={() => setView('mood-chat')} className="action-tile group">
+                    <div className="action-marker bg-teal/25 group-hover:bg-teal/35" />
+                    <div className="min-w-0">
+                      <p className="font-display font-semibold text-sm text-foreground">Open today&apos;s mood room</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Talk with people feeling the same way today</p>
                     </div>
                   </button>
                 </div>
@@ -218,7 +269,7 @@ const AppPage = () => {
                     setSelectedWhisper(whisper);
                     setView('respond');
                   }}
-                  onReport={(questionId) => handleReportQuestion(questionId)}
+                  onReport={(target) => openQuestionReport(target)}
                 />
 
                 <div className="panel-surface text-center py-6 px-4">
@@ -243,7 +294,7 @@ const AppPage = () => {
             responsesRemaining={responsesRemaining}
             onWhisperSubmitted={refreshAll}
             onReactToAnswer={handleReactToAnswer}
-            onReportAnswer={handleReportAnswer}
+            onReportAnswer={openAnswerReport}
           />
         )}
 
@@ -255,7 +306,23 @@ const AppPage = () => {
             responsesDone={responsesDone}
             responsesRemaining={responsesRemaining}
             onAnswerSubmitted={refreshAll}
-            onReportQuestion={handleReportQuestion}
+            onReportQuestion={openQuestionReport}
+          />
+        )}
+
+        {view === 'report' && (
+          <ReportScreen
+            target={reportTarget}
+            onBack={() => setView('home')}
+            onSubmitReport={submitReport}
+          />
+        )}
+
+        {view === 'mood-chat' && (
+          <MoodBuddyChat
+            userId={user.id}
+            onBack={() => setView('home')}
+            initialMood={moodRoomState.mood}
           />
         )}
       </main>

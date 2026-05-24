@@ -15,7 +15,7 @@ interface FeedWhisper {
 interface VoicesFromWellProps {
   whispers: FeedWhisper[];
   onRespond: (whisper: FeedWhisper) => void;
-  onReport: (questionId: string) => void;
+  onReport: (target: { questionId: string; snippet?: string }) => void;
   onRefresh: () => Promise<void>;
 }
 
@@ -77,7 +77,7 @@ const VoicesFromWell = ({ whispers, onRespond, onReport, onRefresh }: VoicesFrom
                     Respond
                   </Button>
                   <button
-                    onClick={() => onReport(whisper.id)}
+                    onClick={() => onReport({ questionId: whisper.id, snippet: whisper.text })}
                     className="text-xs text-muted-foreground hover:text-foreground"
                   >
                     Report

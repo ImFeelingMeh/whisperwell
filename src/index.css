@@ -1,4 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+/* Custom local fonts (placed in public/fonts) */
+@font-face {
+  font-family: 'TT Ramillas Trial';
+  src: url('/fonts/TT-Ramillas-Trial-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Carmen Sans';
+  src: url('/fonts/Carmen-Sans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -96,15 +110,22 @@
 }
 
 @layer base {
+  html {
+    @apply bg-background;
+  }
+
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground transition-colors duration-500;
-    font-family: 'Nunito', system-ui, sans-serif;
+    @apply bg-background text-foreground transition-colors duration-500 font-sans;
+    font-family: 'Carmen Sans', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
   }
-  button, a, input, textarea {
+
+  button, a, input, textarea, select {
     @apply transition-all duration-300;
+    font-family: 'Carmen Sans', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
   }
 }
 
@@ -174,6 +195,26 @@
     height: 180px;
     margin: 0 auto;
     filter: drop-shadow(0 10px 18px hsl(var(--teal) / 0.1));
+  }
+
+  /* Floating decorative bubbles used across Ask/Answer tabs */
+  .bubble {
+    position: absolute;
+    bottom: 6%;
+    transform: translateY(0) scale(1);
+    border-radius: 9999px;
+    background: radial-gradient(circle at 30% 30%, hsl(var(--teal-light) / 0.95), hsl(var(--teal) / 0.6));
+    box-shadow: 0 6px 18px hsl(var(--teal) / 0.12), inset 0 -2px 6px hsl(var(--teal-dark) / 0.08);
+    opacity: 0.9;
+    filter: blur(0.2px);
+    will-change: transform, opacity;
+    animation: bubble-rise 6s infinite ease-in-out;
+  }
+
+  @keyframes bubble-rise {
+    0% { transform: translateY(0) scale(0.95); opacity: 0.85; }
+    50% { transform: translateY(-18px) scale(1.05); opacity: 1; }
+    100% { transform: translateY(-36px) scale(0.98); opacity: 0.7; }
   }
 
   .well-visual::before {
@@ -278,14 +319,71 @@
   }
 
   .panel-surface {
-    @apply rounded-2xl border bg-card/90 shadow-sm backdrop-blur-sm;
+    position: relative;
+    @apply rounded-2xl border bg-card/90 shadow-[0_18px_50px_-30px_hsl(var(--foreground)/0.28)] backdrop-blur-sm;
+    overflow: hidden;
+  }
+
+  .panel-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top left, hsl(var(--primary) / 0.06), transparent 28%),
+      radial-gradient(circle at bottom right, hsl(var(--accent) / 0.05), transparent 24%);
+    pointer-events: none;
+  }
+
+  /* Apply Ramillas for headings and key UI accents (main points) */
+  h1,h2,h3,h4,h5,h6, .section-heading, .action-tile, .panel-surface, .progress-fill {
+    @apply font-display;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .action-tile {
-    @apply rounded-xl border border-border bg-card px-4 py-3.5 text-left transition-all duration-200 flex items-start gap-3;
+    position: relative;
+    @apply rounded-2xl border border-border px-4 py-3.5 text-left transition-all duration-300 flex items-start gap-3 bg-card/90;
+    overflow: hidden;
+    min-height: 96px;
+    background-image: linear-gradient(135deg, hsl(var(--card) / 0.92), hsl(var(--muted) / 0.22));
   }
+
+  .action-tile::before {
+    /* soft accent orb overlapping the tile for distinctive look */
+    content: '';
+    position: absolute;
+    right: -28px;
+    top: -18px;
+    width: 120px;
+    height: 120px;
+    border-radius: 40%;
+    background: radial-gradient(circle at 30% 30%, hsl(var(--primary) / 0.18), transparent 45%), radial-gradient(circle at 70% 70%, hsl(var(--accent) / 0.08), transparent 65%);
+    transform: rotate(12deg) scale(1.02);
+    pointer-events: none;
+    filter: blur(8px) saturate(1.05);
+    opacity: 0.95;
+  }
+
+  .action-tile::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, hsl(var(--primary) / 0.7), hsl(var(--accent) / 0.55));
+    opacity: 0.75;
+  }
+
   .action-tile:hover {
-    @apply border-primary/25 shadow-sm;
+    @apply border-primary/30 shadow-md;
+    transform: translateZ(0) scale(1.01);
+  }
+
+  .action-tile .action-marker {
+    @apply mt-1 h-8 w-2 rounded-full shrink-0 transition-all;
+    border-radius: 9999px;
   }
 
   .section-heading {
@@ -302,6 +400,14 @@
 
   .app-shell {
     @apply w-full max-w-6xl mx-auto px-4;
+  }
+
+  .app-header {
+    @apply border-b sticky top-0 z-30 bg-background/95 backdrop-blur-md shadow-sm;
+  }
+
+  .app-main {
+    @apply relative z-10 pt-5 pb-6;
   }
 
   .home-grid {

@@ -13,7 +13,7 @@ interface DropWhisperProps {
   responsesRemaining: number;
   onWhisperSubmitted: () => Promise<void>;
   onReactToAnswer: (answerId: string, reactionType: string) => Promise<void>;
-  onReportAnswer: (answerId: string, reason: string) => Promise<void>;
+  onReportAnswer: (target: { answerId: string; snippet?: string }) => void;
 }
 
 const DropWhisper = ({
@@ -136,7 +136,7 @@ const DropWhisper = ({
                     ))}
                   </div>
                   <button
-                    onClick={() => onReportAnswer(answer.answer_id, 'harmful advice')}
+                    onClick={() => onReportAnswer({ answerId: answer.answer_id, snippet: answer.answer_text })}
                     className="text-xs text-muted-foreground hover:text-foreground"
                   >
                     Report

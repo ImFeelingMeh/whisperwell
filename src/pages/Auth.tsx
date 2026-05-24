@@ -104,7 +104,7 @@ const Auth = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {onboardingStep < onboardingMessages.length ? (
+            {onboardingStep < onboardingMessages.length && (
               <div className="rounded-xl border bg-muted/35 px-4 py-4 text-center">
                 <p className="text-sm text-foreground">{onboardingMessages[onboardingStep]}</p>
                 <div className="mt-3 flex items-center justify-center gap-1.5">
@@ -124,24 +124,15 @@ const Auth = () => {
                   Next
                 </Button>
               </div>
-            ) : (
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => setOnboardingStep(onboardingMessages.length + 1)}
-              >
-                Enter the well
-              </Button>
             )}
 
-            {onboardingStep <= onboardingMessages.length && (
+            {onboardingStep < onboardingMessages.length && (
               <p className="text-xs text-center text-muted-foreground">
                 Complete onboarding to continue.
               </p>
             )}
 
-            {onboardingStep > onboardingMessages.length && (
+            {onboardingStep >= onboardingMessages.length && (
               <>
             <Button
               type="button"
