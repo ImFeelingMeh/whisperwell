@@ -14,24 +14,22 @@ interface ModerationQueueCardProps {
 }
 
 const ModerationQueueCard = ({ items }: ModerationQueueCardProps) => {
+  if (items.length === 0) return null;
+
   return (
-    <Card className="border bg-card/90 shadow-sm">
+    <Card className="panel-surface">
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-display text-muted-foreground">Moderation Queue</CardTitle>
+        <CardTitle className="text-sm font-display text-muted-foreground">Safety queue</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {items.length === 0 ? (
-          <p className="text-xs text-muted-foreground">No open reports right now.</p>
-        ) : (
-          items.map((item) => (
-            <div key={item.id} className="rounded-lg border bg-background/70 p-2 text-xs">
-              <p className="font-semibold text-foreground">
-                {item.content_type === 'question' ? 'Whisper' : 'Response'} • {item.source.replace('_', ' ')}
-              </p>
-              <p className="text-muted-foreground">{item.reason}</p>
-            </div>
-          ))
-        )}
+        {items.map((item) => (
+          <div key={item.id} className="rounded-lg border bg-background/70 p-2 text-xs">
+            <p className="font-semibold text-foreground">
+              {item.content_type === 'question' ? 'Whisper' : 'Response'} • {item.source.replace('_', ' ')}
+            </p>
+            <p className="text-muted-foreground">{item.reason}</p>
+          </div>
+        ))}
       </CardContent>
     </Card>
   );

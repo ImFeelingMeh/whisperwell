@@ -15,8 +15,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Nunito', 'system-ui', 'sans-serif'],
-        display: ['Quicksand', 'Nunito', 'system-ui', 'sans-serif'],
+        sans: ['Carmen Sans', 'Nunito', 'system-ui', 'sans-serif'],
+        display: ['TT Ramillas Trial', 'Quicksand', 'Nunito', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

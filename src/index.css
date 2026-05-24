@@ -1,4 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+/* Custom local fonts (placed in public/fonts) */
+@font-face {
+  font-family: 'TT Ramillas Trial';
+  src: url('/fonts/TT-Ramillas-Trial-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Carmen Sans';
+  src: url('/fonts/Carmen-Sans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -96,15 +110,22 @@
 }
 
 @layer base {
+  html {
+    @apply bg-background;
+  }
+
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground transition-colors duration-500;
-    font-family: 'Nunito', system-ui, sans-serif;
+    @apply bg-background text-foreground transition-colors duration-500 font-sans;
+    font-family: 'Carmen Sans', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
   }
-  button, a, input, textarea {
+
+  button, a, input, textarea, select {
     @apply transition-all duration-300;
+    font-family: 'Carmen Sans', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
   }
 }
 
@@ -150,6 +171,11 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes subtle-rise {
+  from { transform: translateY(4px); opacity: 0.85; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
 .animate-float { animation: float 4s ease-in-out infinite; }
 .animate-shimmer {
   background: linear-gradient(90deg, transparent, hsl(var(--teal) / 0.08), transparent);
@@ -159,6 +185,7 @@
 .animate-fade-in-up { animation: fade-in-up 0.5s ease-out; }
 .animate-gentle-pulse { animation: gentle-pulse 3s ease-in-out infinite; }
 .animate-soft-glow { animation: soft-glow 3.2s ease-in-out infinite; }
+.animate-subtle-rise { animation: subtle-rise 0.35s ease-out; }
 
 @layer components {
   /* Well visual */
@@ -167,6 +194,39 @@
     width: 180px;
     height: 180px;
     margin: 0 auto;
+    filter: drop-shadow(0 10px 18px hsl(var(--teal) / 0.1));
+  }
+
+  /* Floating decorative bubbles used across Ask/Answer tabs */
+  .bubble {
+    position: absolute;
+    bottom: 6%;
+    transform: translateY(0) scale(1);
+    border-radius: 9999px;
+    background: radial-gradient(circle at 30% 30%, hsl(var(--teal-light) / 0.95), hsl(var(--teal) / 0.6));
+    box-shadow: 0 6px 18px hsl(var(--teal) / 0.12), inset 0 -2px 6px hsl(var(--teal-dark) / 0.08);
+    opacity: 0.9;
+    filter: blur(0.2px);
+    will-change: transform, opacity;
+    animation: bubble-rise 6s infinite ease-in-out;
+  }
+
+  @keyframes bubble-rise {
+    0% { transform: translateY(0) scale(0.95); opacity: 0.85; }
+    50% { transform: translateY(-18px) scale(1.05); opacity: 1; }
+    100% { transform: translateY(-36px) scale(0.98); opacity: 0.7; }
+  }
+
+  .well-visual::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at 30% 25%, hsl(var(--warm) / 0.35), transparent 60%),
+      radial-gradient(circle at 70% 75%, hsl(var(--accent) / 0.2), transparent 65%);
+    z-index: -1;
+    opacity: 0.55;
   }
 
   .well-opening {
@@ -174,21 +234,24 @@
     inset: 0;
     border-radius: 50%;
     background: 
-      radial-gradient(circle at 35% 30%, hsl(var(--teal-light) / 0.5) 0%, transparent 50%),
-      radial-gradient(circle at center, hsl(var(--teal) / 0.6) 0%, hsl(var(--teal-dark) / 0.8) 60%, hsl(var(--warm-dark)) 100%);
+      radial-gradient(circle at 35% 30%, hsl(var(--teal-light) / 0.58) 0%, transparent 52%),
+      radial-gradient(circle at center, hsl(var(--teal) / 0.72) 0%, hsl(var(--teal-dark) / 0.9) 58%, hsl(var(--warm-dark)) 100%);
     border: 6px solid hsl(var(--warm-dark));
     box-shadow: 
-      inset 0 6px 12px hsl(var(--teal-dark) / 0.4),
-      inset 0 -3px 8px hsl(var(--teal-light) / 0.2),
-      0 4px 16px hsl(var(--teal) / 0.2);
+      inset 0 7px 14px hsl(var(--teal-dark) / 0.45),
+      inset 0 -4px 9px hsl(var(--teal-light) / 0.22),
+      inset 0 0 0 2px hsl(var(--warm) / 0.38),
+      0 6px 16px hsl(var(--teal) / 0.14);
   }
 
   .well-opening::before {
     content: '';
     position: absolute;
-    inset: 12px;
+    inset: 10px;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 25%, hsl(var(--teal-light) / 0.5) 0%, transparent 60%);
+    background:
+      radial-gradient(circle at 35% 24%, hsl(var(--teal-light) / 0.58) 0%, transparent 62%),
+      radial-gradient(circle at 50% 72%, hsl(var(--teal-dark) / 0.34) 0%, transparent 70%);
     animation: gentle-pulse 4s ease-in-out infinite;
   }
 
@@ -238,20 +301,136 @@
   .category-chip {
     @apply inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border cursor-pointer transition-all duration-200;
   }
-  .category-chip:hover { @apply scale-105; }
+  .category-chip:hover { @apply border-primary/30; }
   .category-chip.selected {
     @apply bg-primary text-primary-foreground border-primary shadow-sm;
   }
 
   /* Mood button */
   .mood-btn {
-    @apply flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 cursor-pointer transition-all duration-300 min-w-[88px];
+    @apply flex items-center justify-center gap-1.5 p-2.5 rounded-xl border cursor-pointer transition-all duration-200 min-h-[42px] bg-card;
   }
   .mood-btn:hover {
-    @apply -translate-y-0.5 shadow-sm;
+    @apply border-primary/30;
   }
   .mood-btn.selected {
-    @apply border-primary bg-primary/10 shadow-sm;
+    @apply border-primary bg-primary/10;
     animation: soft-glow 2.8s ease-in-out infinite;
+  }
+
+  .panel-surface {
+    position: relative;
+    @apply rounded-2xl border bg-card/90 shadow-[0_18px_50px_-30px_hsl(var(--foreground)/0.28)] backdrop-blur-sm;
+    overflow: hidden;
+  }
+
+  .panel-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top left, hsl(var(--primary) / 0.06), transparent 28%),
+      radial-gradient(circle at bottom right, hsl(var(--accent) / 0.05), transparent 24%);
+    pointer-events: none;
+  }
+
+  /* Apply Ramillas for headings and key UI accents (main points) */
+  h1,h2,h3,h4,h5,h6, .section-heading, .action-tile, .panel-surface, .progress-fill {
+    @apply font-display;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .action-tile {
+    position: relative;
+    @apply rounded-2xl border border-border px-4 py-3.5 text-left transition-all duration-300 flex items-start gap-3 bg-card/90;
+    overflow: hidden;
+    min-height: 96px;
+    background-image: linear-gradient(135deg, hsl(var(--card) / 0.92), hsl(var(--muted) / 0.22));
+  }
+
+  .action-tile::before {
+    /* soft accent orb overlapping the tile for distinctive look */
+    content: '';
+    position: absolute;
+    right: -28px;
+    top: -18px;
+    width: 120px;
+    height: 120px;
+    border-radius: 40%;
+    background: radial-gradient(circle at 30% 30%, hsl(var(--primary) / 0.18), transparent 45%), radial-gradient(circle at 70% 70%, hsl(var(--accent) / 0.08), transparent 65%);
+    transform: rotate(12deg) scale(1.02);
+    pointer-events: none;
+    filter: blur(8px) saturate(1.05);
+    opacity: 0.95;
+  }
+
+  .action-tile::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, hsl(var(--primary) / 0.7), hsl(var(--accent) / 0.55));
+    opacity: 0.75;
+  }
+
+  .action-tile:hover {
+    @apply border-primary/30 shadow-md;
+    transform: translateZ(0) scale(1.01);
+  }
+
+  .action-tile .action-marker {
+    @apply mt-1 h-8 w-2 rounded-full shrink-0 transition-all;
+    border-radius: 9999px;
+  }
+
+  .section-heading {
+    @apply text-xs tracking-wide uppercase text-muted-foreground font-semibold;
+  }
+
+  .quiet-divider {
+    @apply h-px w-full bg-border/60;
+  }
+
+  .action-marker {
+    @apply mt-1 h-7 w-1.5 rounded-full shrink-0 transition-colors;
+  }
+
+  .app-shell {
+    @apply w-full max-w-6xl mx-auto px-4;
+  }
+
+  .app-header {
+    @apply border-b sticky top-0 z-30 bg-background/95 backdrop-blur-md shadow-sm;
+  }
+
+  .app-main {
+    @apply relative z-10 pt-5 pb-6;
+  }
+
+  .home-grid {
+    @apply grid gap-4 lg:grid-cols-12;
+  }
+
+  .home-main {
+    @apply lg:col-span-7 space-y-4;
+  }
+
+  .home-side {
+    @apply lg:col-span-5 space-y-4;
+  }
+
+  .quiet-note {
+    @apply rounded-xl border bg-muted/35 px-3.5 py-2.5 text-xs text-muted-foreground;
+  }
+
+  .progress-track {
+    @apply h-1.5 rounded-full bg-muted overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full bg-primary;
   }
 }

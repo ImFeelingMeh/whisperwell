@@ -1,14 +1,12 @@
 export const CATEGORIES = [
   { value: 'anxiety', label: 'Anxiety', emoji: '😰' },
   { value: 'loneliness', label: 'Loneliness', emoji: '🫂' },
-  { value: 'school-work', label: 'School / Work', emoji: '📚' },
+  { value: 'school-work', label: 'Stress (school/work)', emoji: '📚' },
   { value: 'relationships', label: 'Relationships', emoji: '💔' },
   { value: 'family', label: 'Family', emoji: '🏠' },
-  { value: 'self-doubt', label: 'Self-doubt', emoji: '🪞' },
   { value: 'burnout', label: 'Burnout', emoji: '🔥' },
+  { value: 'self-doubt', label: 'Self-doubt', emoji: '🪞' },
   { value: 'general-vent', label: 'General vent', emoji: '💨' },
-  { value: 'need-advice', label: 'Need advice', emoji: '💡' },
-  { value: 'need-encouragement', label: 'Need encouragement', emoji: '🌱' },
 ] as const;
 
 export const EMOTIONS = [
@@ -24,14 +22,14 @@ export const EMOTIONS = [
 
 export const VENT_MODES = [
   { value: 'advice', label: 'I want advice', emoji: '💡' },
-  { value: 'vent', label: 'I just need to vent', emoji: '💨' },
-  { value: 'encouragement', label: 'I want encouragement', emoji: '🤗' },
+  { value: 'vent', label: 'I just want to vent', emoji: '💨' },
+  { value: 'encouragement', label: 'I need encouragement', emoji: '🤗' },
 ] as const;
 
 export const RESPONSE_PROMPTS = [
-  "Have you experienced something similar?",
-  "What helped you when you felt this way?",
-  "What encouragement could you give them?",
+  'Share a similar experience',
+  'Offer encouragement',
+  'Suggest something that helped you',
 ] as const;
 
 export const MOODS = [
@@ -41,7 +39,7 @@ export const MOODS = [
 ] as const;
 
 export const REACTION_TYPES = [
-  { value: 'helpful', label: 'Helpful' },
-  { value: 'relatable', label: 'Relatable' },
-  { value: 'encouraging', label: 'Encouraging' },
+  { value: 'helpful', label: 'This helped' },
+  { value: 'relatable', label: 'I relate' },
+  { value: 'encouraging', label: 'This gave me hope' },
 ] as const;
